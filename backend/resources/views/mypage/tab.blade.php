@@ -30,9 +30,30 @@
 <div class="tab-content" id="pills-tabContent">
   @if(isset($efforts[0]))
   <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-    <a href="{{route('goals.show', ['goal'=>$goals[0]])}}">
-      <i class="fas fa-chevron-circle-right mr-1"></i>目標：{{ $goals[0]->title }}の詳細はこちら
-    </a>     
+    <div class="card">
+      <div class="card-body"> 
+        <div class="mb-2 h5">
+          <a class="text-dark font-weight-bold" href="{{ route('goals.show', ['goal' => $goals[0]]) }}">
+            {{ $goals[0]->title }}
+          </a>
+        </div>                 
+        <div class="mb-2">
+          {{ $goals[0]->content }}
+        </div>  
+        @if ($goals[0]->deadline)
+        <div class="mb-2">
+          <span class="border px-1">目標達成期限</span>
+          {{ date("Y/m/d", strtotime($goals[0]->deadline)) }}
+        </div>     
+        @endif
+        @if ($goals[0]->efforts_time)
+        <div>
+          <span class="border px-1">総継続時間</span>
+          {{$goals[0]->efforts_time}} 時間
+        </div> 
+        @endif         
+      </div> 
+    </div>        
     @foreach($efforts[0] as $effort)
     @include('efforts.card')
     @endforeach 
@@ -41,9 +62,30 @@
   @endif 
   @if(isset($efforts[1]))
   <div class="tab-pane fade" id="pills-second" role="tabpanel" aria-labelledby="pills-second-tab">
-    <a href="{{route('goals.show', ['goal'=>$goals[1]])}}">
-      <i class="fas fa-chevron-circle-right mr-1"></i>目標：{{ $goals[1]->title }}の詳細はこちら
-    </a>    
+    <div class="card">
+      <div class="card-body"> 
+        <div class="mb-2 h5">
+          <a class="text-dark font-weight-bold" href="{{ route('goals.show', ['goal' => $goals[1]]) }}">
+            {{ $goals[1]->title }}
+          </a>
+        </div> 
+        <div class="mb-2">
+          {{ $goals[1]->content }}
+        </div>  
+        @if ($goals[1]->deadline)
+        <div class="mb-2">
+          <span class="border px-1">目標達成期限</span>
+          {{ date("Y/m/d", strtotime($goals[1]->deadline)) }}
+        </div> 
+        @endif 
+        @if ($goals[1]->efforts_time)   
+        <div>
+          <span class="border px-1">総継続時間</span>
+          {{$goals[1]->efforts_time}} 時間
+        </div>
+        @endif       
+      </div> 
+    </div>       
     @foreach($efforts[1] as $effort)
     @include('efforts.card')
     @endforeach
@@ -52,9 +94,30 @@
   @endif 
   @if(isset($efforts[2])) 
   <div class="tab-pane fade" id="pills-third" role="tabpanel" aria-labelledby="pills-third-tab">
-    <a href="{{route('goals.show', ['goal'=>$goals[2]])}}">
-      <i class="fas fa-chevron-circle-right mr-1"></i>目標：{{ $goals[2]->title }}の詳細はこちら
-    </a>    
+    <div class="card">
+      <div class="card-body">
+        <div class="mb-2 h5">
+          <a class="text-dark font-weight-bold" href="{{ route('goals.show', ['goal' => $goals[2]]) }}">
+            {{ $goals[2]->title }}
+          </a>
+        </div> 
+        <div class="mb-2">
+          {{ $goals[2]->content }}
+        </div> 
+        @if ($goals[2]->deadline) 
+        <div class="mb-2">
+          <span class="border px-1">目標達成期限</span>
+          {{ date("Y/m/d", strtotime($goals[2]->deadline)) }}
+        </div>      
+        @endif
+        @if ($goals[2]->efforts_time)
+        <div>
+          <span class="border px-1">総継続時間</span>
+          {{$goals[2]->efforts_time}} 時間
+        </div>  
+        @endif     
+      </div>    
+    </div>
     @foreach($efforts[2] as $effort)
     @include('efforts.card')
     @endforeach

@@ -66,13 +66,20 @@
       </a>
     </h3>
     <div class="card-text mb-3">
-      <div>内容：</div>
       {{ $goal->content }}
     </div>
+    @if ($goal->deadline)
     <div class="card-text mt-1">
-      <span class="mr-2">継続時間/目標時間：</span>
-      {{ $goal->efforts_time }}/{{ $goal->goal_time}}時間
+      <span class="mr-2 border">目標達成期限</span>
+      {{ date("Y/m/d", strtotime($goal->deadline)) }}
     </div>    
+    @endif
+    @if ($goal->efforts_time !== 0)
+    <div class="card-text mt-1">
+      <span class="mr-2 border">総継続時間</span>
+      {{ $goal->efforts_time }} 時間
+    </div>    
+    @endif
 
   </div>
 </div>
