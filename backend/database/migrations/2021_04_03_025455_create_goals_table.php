@@ -21,8 +21,7 @@ class CreateGoalsTable extends Migration
             $table->longText('content');
             $table->string('image')->nullable();
             $table->tinyInteger('status')->default(0)->comment('0=アクティブ, 1=クリア済み, 2=削除済み');
-            $table->bigInteger('goal_time')->unsigned()->nullable();
-            $table->date('deadline')->nullable();
+            $table->bigInteger('goal_time')->unsigned();
             $table->bigInteger('efforts_time')->unsigned()->default(0);
             $table->bigInteger('stacking_days')->unsigned()->default(0);
             $table->bigInteger('continuation_days')->unsigned()->default(0);
