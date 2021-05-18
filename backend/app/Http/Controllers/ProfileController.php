@@ -36,8 +36,8 @@ class ProfileController extends Controller
 
 		// $userと$goal_labelに対応する目標を配列として取得
 		// $goalひとつひとつに紐づく$effortを配列として取得
-		$goals = $this->goalsGet($user, $goal_label);
-		$efforts = $this->effortsGet($goals, $search);
+		$goals = Goal::where('user_id', $user->id)->paginate(5);
+		$efforts = Effort::where('user_id', $user->id)->paginate(5);
 
 		// 達成済みの目標を配列で取得
 		$cleared_goals = $this->goalsGet($user, 1);

@@ -4,7 +4,7 @@
   
   <div class="container">
   	@include('mypage.profile')
-  	@include('mypage.label')
+  	{{-- @include('mypage.label') --}}
   	@include('mypage.tab')
   	@if($goals->isEmpty() && $user->id === Auth::user()->id)
 	  	<div class="my-4 text-center">
