@@ -14,6 +14,7 @@ class Goal extends Model
 		'content',
 		'goal_time',
 		'user_id',
+		'deadline'
 	];
 
 

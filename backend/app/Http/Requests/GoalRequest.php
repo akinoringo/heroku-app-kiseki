@@ -27,7 +27,8 @@ class GoalRequest extends FormRequest
             //
             'title' => 'required|max:50',
             'content' => 'required|max:500',
-            'goal_time' => 'required|integer|min:10',
+            'goal_time' => 'integer|min:10',
+            'deadline' => 'required|date',
         ];
     }
 

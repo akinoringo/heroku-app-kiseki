@@ -131,7 +131,7 @@ class EffortController extends Controller
 		$goal->efforts_time = $this->TimeService->sumEffortsTime($efforts);	
 
 		// 目標時間>合計継続時間であれば目標ステータスを1に更新
-		$this->GoalService->updateGoalStatus($goal, $efforts);			
+		// $this->GoalService->updateGoalStatus($goal, $efforts);			
 		$goal->save();
 
 		// ログインユーザーを取得
@@ -197,7 +197,7 @@ class EffortController extends Controller
 		// 目標に紐づく軌跡の継続時間の合計をDBに保存		
 		$goal->efforts_time = $this->TimeService->sumEffortsTime($efforts);
 		//goal_time>total(effort_time)であれば目標ステータスを1に更新する。
-		$this->GoalService->updateGoalStatus($goal, $efforts);		
+		// $this->GoalService->updateGoalStatus($goal, $efforts);		
 		$goal->save();
 
 

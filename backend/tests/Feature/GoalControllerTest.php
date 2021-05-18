@@ -48,21 +48,21 @@ class GoalControllerTest extends TestCase
         $user_id = $user->id;
         $title = "タイトル";
         $content = "内容";
-        $goal_time = 100;
+        $deadline = date('Y-m-d', strtotime('2022-09-09'));
 
         $responce = $this->actingAs($user)
             ->post(route('goals.store', [
                 'user_id' => $user_id,
                 'title' => $title,
                 'content' => $content,
-                'goal_time' => $goal_time,
+                'deadline' => $deadline,
             ]));
 
         $this->assertDatabaseHas('goals', [
                 'user_id' => $user_id,
                 'title' => $title,
                 'content' => $content,
-                'goal_time' => $goal_time,
+                'deadline' => $deadline,
         ]);
 
         $responce->assertRedirect(route('mypage.show', ['id' => $user_id]));
@@ -115,13 +115,13 @@ class GoalControllerTest extends TestCase
         $user_id = $user->id;
         $title = "タイトル";
         $content = "内容";
-        $goal_time = 100;
+        $deadline = date('Y-m-d', strtotime('2022-09-09'));
 
         $goal = Goal::create([
             'user_id' => $user_id,
             'title' => $title,
             'content' => $content,
-            'goal_time' => $goal_time
+            'deadline' => $deadline
         ]);
 
         $responce = $this->actingAs($user)
@@ -131,7 +131,7 @@ class GoalControllerTest extends TestCase
             'user_id' => $user_id,
             'title' => $title,
             'content' => $content,
-            'goal_time' => $goal_time,           
+            'deadline' => $deadline,           
         ]);
 
         $responce->assertRedirect(route('mypage.show', ['id' => $user_id]));

@@ -47,7 +47,7 @@ class EffortControllerTest extends TestCase
             'user_id' => $user->id,
             'title' => "タイトル",
             'content' => "内容",
-            'goal_time' => 100,
+            'deadline' => date('Y-m-d', strtotime('2022-09-09')),
         ]);
 
         $goals = Goal::where('user_id', $user->id)->get();
@@ -75,7 +75,7 @@ class EffortControllerTest extends TestCase
             'user_id' => $user->id,
             'title' => "タイトル",
             'content' => "内容",
-            'goal_time' => 100,
+            'deadline' => date('Y-m-d', strtotime('2022-09-09')),
         ]);    
 
         $title_effort = "タイトル";
@@ -111,7 +111,7 @@ class EffortControllerTest extends TestCase
             'user_id' => $user->id,
             'title' => "タイトル",
             'content' => "内容",
-            'goal_time' => 100,
+            'deadline' => date('Y-m-d', strtotime('2022-09-09')),
         ]);      
 
         $title_effort = "タイトル";

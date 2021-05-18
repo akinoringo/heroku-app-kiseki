@@ -145,6 +145,24 @@ class GoalController extends Controller
 	}	
 
 	/**
+		* 目標のクリア処理
+		* @param Goal $goal
+		* @return  \Illuminate\Http\RedirectResponse
+	*/
+	public function clear(Goal $goal)
+	{
+		$goal->status = 1;
+		$goal->save();
+
+		return redirect()
+						->route('mypage.show', ['id' => Auth::user()->id])
+						->with([
+							'flash_message' => 'おめでとうございます。目標を達成しました。',
+							'color' => 'success'			
+						]);
+	}		
+
+	/**
 		* 未達成の目標数をカウントする
 		* @param Goal $goal
 		* @return  int $number

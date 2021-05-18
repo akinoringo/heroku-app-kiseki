@@ -23,6 +23,8 @@ Route::get('/', 'EffortController@index')->name('home');
 # 目標関連ルーティング
 Route::resource('/goals', 'GoalController')->except(['index, show'])->middleware('auth');
 Route::resource('/goals', 'GoalController')->only(['show']);
+Route::post('/goals/{goal}/clear', 'GoalController@clear')->name('goals.clear');
+
 
 # 軌跡関連ルーティング
 Route::resource('/efforts', 'EffortController')->except(['index, show'])->middleware('auth');
