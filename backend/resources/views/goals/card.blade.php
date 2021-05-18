@@ -22,8 +22,12 @@
           <div class="dropdown-menu dropdown-menu-right">
             <a class="dropdown-item" href="{{ route("goals.edit", ['goal' => $goal]) }}">
               <i class="fas fa-pen mr-1"></i>目標を編集する
-            </a>
+            </a>          
             <div class="dropdown-divider"></div>
+            <a class="dropdown-item text-success" data-toggle="modal" data-target="#modal-clear-{{ $goal->id }}">
+              <i class="fas fa-check-square mr-1 text-success"></i>目標を達成済にする
+            </a>
+            <div class="dropdown-divider"></div>            
             <a class="dropdown-item text-danger" data-toggle="modal" data-target="#modal-delete-{{ $goal->id }}">
               <i class="fas fa-trash-alt mr-1"></i>目標を削除する
             </a>
@@ -31,6 +35,29 @@
         </div>
       </div>
       <!-- dropdown -->
+      <!-- modal -->
+      <div id="modal-clear-{{ $goal->id }}" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form method="POST" action="{{ route('goals.clear', ['goal' => $goal]) }}">
+              @csrf
+              <div class="modal-body">
+                {{ $goal->title }}を達成済みにします。よろしいですか？
+              </div>
+              <div class="modal-footer justify-content-between">
+                <a class="btn btn-outline-grey" data-dismiss="modal">キャンセル</a>
+                <button type="submit" class="btn btn-success">達成済にする</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- modal -->      
 
       <!-- modal -->
       <div id="modal-delete-{{ $goal->id }}" class="modal fade" tabindex="-1" role="dialog">
@@ -63,6 +90,10 @@
     <h3 class="h4 card-title">
       <a class="text-dark" href="{{ route('goals.show', ['goal' => $goal]) }}">
         {{ $goal->title }}
+        @if ($goal->status === 1)
+        <i class="fas fa-check-square ml-2 text-success"></i>
+        <span class="text-success font-weight-bold">達成済み</p>
+        @endif
       </a>
     </h3>
     <div class="card-text mb-3">
