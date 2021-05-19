@@ -34,6 +34,9 @@ Route::prefix('efforts')->name('efforts.')->group(function(){
 	Route::delete('/{effort}/like', 'EffortController@unlike')->name('unlike')->middleware('auth');
 });
 
+# コメント関連
+Route::resource('/comments', 'CommentController')->only(['store'])->middleware('auth');
+
 # フォロー / フォロー取り消し
 Route::middleware('auth')->group(function(){
 	Route::put('/{name}/follow', 'ProfileController@follow')->name('follow');

@@ -51,7 +51,12 @@ class User extends Authenticatable
     public function efforts()
     {
         return $this->hasMany('App\Effort');
-    }  
+    } 
+
+    public function comments()
+    {
+        return $this->hasMany('App\Comment');
+    }      
 
 
     public function followers(): BelongsToMany

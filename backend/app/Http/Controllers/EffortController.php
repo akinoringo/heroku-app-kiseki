@@ -73,7 +73,6 @@ class EffortController extends Controller
 	{
 		return view('efforts.show', [
 			'effort' => $effort,
-			'user' => Auth::user()
 		]);
 	}	
 
