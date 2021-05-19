@@ -29,6 +29,6 @@
     @endforeach    
   </div> 
   <div class="tab-pane fade" id="pills-graph" role="tabpanel" aria-labelledby="pills-graph-tab">
-    {{-- <effort-chart userid='@json($id)'></effort-chart> --}}
+    <effort-chart userid='@json($id)'></effort-chart>
   </div>    
 </div>

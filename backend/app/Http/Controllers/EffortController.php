@@ -147,7 +147,11 @@ class EffortController extends Controller
 		$user->save();
 
 		return redirect()
-						->route('mypage.show', ['id' => Auth::user()->id]);			
+						->route('mypage.show', ['id' => Auth::user()->id])
+						->with([
+							'flash_message' => '軌跡を作成しました。',
+							'color' => 'success'
+						]);		
 	}
 
 	/**

@@ -28,6 +28,7 @@ class ProfileController extends Controller
 	public function show($id, Request $request) {
 
 		// viewから受け渡された$idに対応するユーザーの取得
+		$id = (int)$id;
 		$user = User::find($id);
 
 		// リクエストから検索条件と目標のステータス(0：未クリア、1：クリア済み)の取得
@@ -36,13 +37,13 @@ class ProfileController extends Controller
 
 		// $userと$goal_labelに対応する目標を配列として取得
 		// $goalひとつひとつに紐づく$effortを配列として取得
-		$goals = Goal::where('user_id', $user->id)->paginate(5);
-		$efforts = Effort::where('user_id', $user->id)->paginate(5);
+		$goals = Goal::where('user_id', $user->id)->orderBy('created_at', 'DESC')->paginate(5);
+		$efforts = Effort::where('user_id', $user->id)->orderBy('created_at', 'DESC')->paginate(5);
 
 		// 達成済みの目標を配列で取得
 		$cleared_goals = $this->goalsGet($user, 1);
 
-		return view('mypage.show', compact('user', 'goals', 'efforts', 'goal_label', 'search', 'cleared_goals'));
+		return view('mypage.show', compact('user', 'goals', 'efforts', 'goal_label', 'search', 'cleared_goals', 'id'));
 
 	}
 

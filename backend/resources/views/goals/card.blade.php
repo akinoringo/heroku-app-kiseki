@@ -90,11 +90,11 @@
     <h3 class="h4 card-title">
       <a class="text-dark" href="{{ route('goals.show', ['goal' => $goal]) }}">
         {{ $goal->title }}
-        @if ($goal->status === 1)
-        <i class="fas fa-check-square ml-2 text-success"></i>
-        <span class="text-success font-weight-bold">達成済み</p>
-        @endif
       </a>
+      @if ($goal->status === 1)
+      <i class="fas fa-check-square ml-2 text-success"></i>
+      <span class="text-success font-weight-bold">達成済み</p>
+      @endif      
     </h3>
     <div class="card-text mb-3">
       {{ $goal->content }}
