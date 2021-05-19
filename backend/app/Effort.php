@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 
 class Effort extends Model
@@ -27,6 +29,11 @@ class Effort extends Model
 	{
 		return $this->belongsTo('App\User');
 	}
+
+	public function comments(): hasMany
+	{
+		return $this->hasMany('App\Comment');
+	}	
 
 	public function likes():BelongsToMany
 	{
