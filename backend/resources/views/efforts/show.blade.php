@@ -10,6 +10,9 @@
          @include('comments.card')
         @endforeach    	
       </div>
+
+      <!-- コメント機能 -->
+      @if ( Auth::check() )
       <div class="col-12 mt-2">
         <div class="card pt-2">
           <div class="card-body pt-0">
@@ -28,6 +31,9 @@
           </div>
         </div>
       </div>
+      @endif
+      <!-- コメント機能ここまで -->
+
     </div>     
   </div>
 

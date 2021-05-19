@@ -86,10 +86,10 @@
   </div>
   <div class="card-body pt-0">
     <div class="card-text d-flex">
-      <span class="btn p-1 mb-0 mt-0 mr-2 shadow-none">
+      <a class="btn p-1 mb-0 mt-0 mr-2 shadow-none" href="{{ route('efforts.show', ['effort' => $effort]) }}">
         <i class="far fa-comment mr-2"></i>
-        3
-      </span>
+        {{$effort->comments->count()}}
+      </a>
       <effort-like
         :initial-liked-by='@json($effort->isLikedBy(Auth::user()))'
         :initial-count-likes='@json($effort->count_likes)'
