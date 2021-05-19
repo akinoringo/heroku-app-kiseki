@@ -83,37 +83,43 @@
 
 @if ($efforts->isNotEmpty())
 <div class="container pt-2">
-  @include('efforts.search')
-  <ul class="nav nav-pills mb-3 mt-2" id="pills-tab" role="tablist">
-    <li class="nav-item text-center">
-      <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">
-        みんなの軌跡
-      </a>    
-    </li>
-    @if (Auth::check() && isset($efforts_follow[0]))
-    <li class="nav-item text-center">
-      <a class="nav-link" id="pills-second-tab" data-toggle="pill" href="#pills-second" role="tab" aria-controls="pills-second" aria-selected="false">
-        フォロー中
-      </a>
-    </li>  
-    @endif
-  </ul>
+  <div class="row">
+    <div class="col-lg-4">
+      @include('sidebar.ranking')
+    </div>
+    <div class="col-lg-8">
+      @include('efforts.search')
+      <ul class="nav nav-pills mb-3 mt-2" id="pills-tab" role="tablist">
+        <li class="nav-item text-center">
+          <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">
+            みんなの軌跡
+          </a>    
+        </li>
+        @if (Auth::check() && isset($efforts_follow[0]))
+        <li class="nav-item text-center">
+          <a class="nav-link" id="pills-second-tab" data-toggle="pill" href="#pills-second" role="tab" aria-controls="pills-second" aria-selected="false">
+            フォロー中
+          </a>
+        </li>  
+        @endif
+      </ul>
 
-  <div class="tab-content" id="pills-tabContent">
-    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-    @foreach($efforts as $effort) 
-      @include('efforts.card')
-    @endforeach
-    {{$efforts->appends(request()->query())->links()}}      
-    </div>
-    @if (Auth::check() && isset($efforts_follow[0]))    
-    <div class="tab-pane fade" id="pills-second" role="tabpanel" aria-labelledby="pills-second-tab">
-    @foreach($efforts_follow as $effort) 
-      @include('efforts.card')
-    @endforeach
-    {{$efforts_follow->appends(request()->query())->links()}}
-    </div>
-    @endif
+      <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+        @foreach($efforts as $effort) 
+          @include('efforts.card')
+        @endforeach
+        {{$efforts->appends(request()->query())->links()}}      
+        </div>
+        @if (Auth::check() && isset($efforts_follow[0]))    
+        <div class="tab-pane fade" id="pills-second" role="tabpanel" aria-labelledby="pills-second-tab">
+        @foreach($efforts_follow as $effort) 
+          @include('efforts.card')
+        @endforeach
+        {{$efforts_follow->appends(request()->query())->links()}}
+        </div>
+        @endif
+      </div>
   </div>
 </div>
 @endif
