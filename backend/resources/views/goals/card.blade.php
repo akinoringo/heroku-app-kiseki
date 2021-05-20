@@ -22,11 +22,13 @@
           <div class="dropdown-menu dropdown-menu-right">
             <a class="dropdown-item" href="{{ route("goals.edit", ['goal' => $goal]) }}">
               <i class="fas fa-pen mr-1"></i>目標を編集する
-            </a>          
+            </a>
+            @if ($goal->efforts()->count() > 4)          
             <div class="dropdown-divider"></div>
             <a class="dropdown-item text-success" data-toggle="modal" data-target="#modal-clear-{{ $goal->id }}">
               <i class="fas fa-check-square mr-1 text-success"></i>目標を達成済にする
             </a>
+            @endif
             <div class="dropdown-divider"></div>            
             <a class="dropdown-item text-danger" data-toggle="modal" data-target="#modal-delete-{{ $goal->id }}">
               <i class="fas fa-trash-alt mr-1"></i>目標を削除する

@@ -9,7 +9,7 @@
   <span class="small ml-2">
   	目標の詳細と目標達成に向けて取り組みたいことを記入してください ※500字以内
   </span>
-  <textarea name="content" required class="form-control" rows="16" placeholder="(例)9月24日のフルマラソンで完走する。それに向けて、毎日1時間は運動する">{{ $goal->content ?? old('content') }}</textarea>
+  <textarea name="content" required class="form-control" rows="8" placeholder="(例)9月24日のフルマラソンで完走する。それに向けて、毎日1時間は運動する">{{ $goal->content ?? old('content') }}</textarea>
 </div>
 <div class="form-group">
   <label>目標達成期限</label>

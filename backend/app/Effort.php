@@ -14,6 +14,8 @@ class Effort extends Model
 	protected $fillable = [
 		'title',
 		'content',
+		'reflection',
+		'enthusiasm',
 		'effort_time',
 		'user_id',
 		'goal_id',

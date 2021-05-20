@@ -15,7 +15,7 @@ return [
 
     'accepted'             => ':attributeを承認してください。',
     'active_url'           => ':attributeが有効なURLではありません。',
-    'after'                => ':attributeには、:dateより後の日付を指定してください。',
+    'after'                => ':attributeには、今日より後の日付を指定してください。',
     'after_or_equal'       => ':attributeには、:date以降の日付を指定してください。',
     'alpha'                => ':attributeはアルファベットのみがご利用できます。',
     'alpha_dash'           => ':attributeはアルファベットとダッシュ(-)及び下線(_)がご利用できます。',

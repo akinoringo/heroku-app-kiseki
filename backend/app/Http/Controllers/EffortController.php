@@ -10,6 +10,7 @@ use App\Services\BadgeService;
 use App\Services\DayService;
 use App\Services\EffortService;
 use App\Services\GoalService;
+use App\Services\RankingService;
 use App\Services\TimeService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -24,13 +25,14 @@ class EffortController extends Controller
 	protected $goal_service;
 	protected $time_service;
   
-	public function __construct(BadgeService $badge_service, DayService $day_service, EffortService $effort_service, GoalService $goal_service, TimeService $time_service)
+	public function __construct(RankingService $ranking_service, BadgeService $badge_service, DayService $day_service, EffortService $effort_service, GoalService $goal_service, TimeService $time_service)
 	{
 		// Serviceクラスからインスタンスを作成
 		$this->BadgeService = $badge_service;
 		$this->DayService = $day_service;
 		$this->EffortService = $effort_service;
 		$this->GoalService = $goal_service;
+		$this->RankingService = $ranking_service;			
 		$this->TimeService = $time_service;	
 
 		// EffortPolicyでCRUD操作を制限
@@ -51,15 +53,18 @@ class EffortController extends Controller
 		// 全ての軌跡を検索語でソートして作成順に並び替えて取得
 		$efforts = $this->EffortService->getEffortsAll($search);
 
+		// 積み上げ回数順でランキング
+		$ranked_users = $this->RankingService->ranking();
+
 		// フォロー中の人の軌跡を検索語でソートして作成順に並び替えて取得
 		if (Auth::check()) {
 			$efforts_follow = $this->EffortService->getEffortsFollow($search);
 			
-			return view('home', compact('efforts', 'efforts_follow'));				
+			return view('home', compact('efforts', 'efforts_follow', 'ranked_users'));				
 		} else {
 			// 誰もフォローしていない場合はnullを代入
 			$efforts_follow = null;
-			return view('home', compact('efforts', 'efforts_follow'));
+			return view('home', compact('efforts', 'efforts_follow', 'ranked_users'));
 		}
 
 	}
@@ -144,6 +149,9 @@ class EffortController extends Controller
 		$this->BadgeService->getGoalClearBadge($user, $goal);
 
 		$user->save();
+
+		// 目標達成期限を過ぎていた場合はアラートを出す。
+		$this->DayService->checkGoalDeadline($goal);
 
 		return redirect()
 						->route('mypage.show', ['id' => Auth::user()->id])

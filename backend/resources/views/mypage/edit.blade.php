@@ -80,6 +80,17 @@
   <script src="{{ mix('js/app.js') }}"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/js/mdb.min.js"></script>
+  <script>
+  document.querySelector('.image-picker input')
+        .addEventListener('change', (e) => {
+            const input = e.target;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                input.closest('.image-picker').querySelector('img').src = e.target.result
+            };
+            reader.readAsDataURL(input.files[0]);
+        });    
+  </script>
 
 </body>
 
