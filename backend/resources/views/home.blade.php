@@ -79,8 +79,6 @@
 
 @endguest
 
-@include('layouts.flash')
-
 @if ($efforts->isNotEmpty())
 <div class="container pt-2">
   <div class="row">

@@ -34,7 +34,7 @@ export default {
 			goalsTitle: [],
 			countdatasets: [],
 			timedatasets: [],
-			color: ["#EE3768", "#03D1Aa", "#d3d3d3"]
+			color: ["#EE3768", "#03D1Aa", "#d3d3d3", "blue", "yellow"]
 		};
 	},
 	mounted() {

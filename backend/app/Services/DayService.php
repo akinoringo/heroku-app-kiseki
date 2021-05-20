@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Effort;
 use App\Goal;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class DayService{
@@ -34,4 +35,13 @@ class DayService{
 			$goal->continuation_days_max = $goal->continuation_days;
 		}		
 	}	
+
+	public function checkGoalDeadline($goal){
+		$today = Carbon::today();
+		if ($today->gt($goal->deadline) ) {
+			session()->flash('deadline_message', '目標達成期限を過ぎています。修正してください。');
+			session()->flash('deadline_color', 'danger');				
+		} 
+
+	}
 }

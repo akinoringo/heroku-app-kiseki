@@ -145,6 +145,9 @@ class EffortController extends Controller
 
 		$user->save();
 
+		// 目標達成期限を過ぎていた場合はアラートを出す。
+		$this->DayService->checkGoalDeadline($goal);
+
 		return redirect()
 						->route('mypage.show', ['id' => Auth::user()->id])
 						->with([

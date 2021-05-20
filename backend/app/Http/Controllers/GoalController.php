@@ -151,15 +151,27 @@ class GoalController extends Controller
 	*/
 	public function clear(Goal $goal)
 	{
-		$goal->status = 1;
-		$goal->save();
+		if ($goal->efforts()->count() > 4)
+		{
+			$goal->status = 1;
+			$goal->save();
 
-		return redirect()
-						->route('mypage.show', ['id' => Auth::user()->id])
-						->with([
-							'flash_message' => 'おめでとうございます。目標を達成しました。',
-							'color' => 'success'			
-						]);
+			return redirect()
+							->route('mypage.show', ['id' => Auth::user()->id])
+							->with([
+								'flash_message' => 'おめでとうございます。目標を達成しました。',
+								'color' => 'success'			
+							]);			
+		} else {
+			return redirect()
+							->route('goals.show', ['goal' => $goal])
+							->with([
+								'flash_message' => '軌跡を5件以上登録しないと、目標を達成済みにはできません。',
+								'color' => 'danger'			
+							]);				
+		}
+
+
 	}		
 
 	/**
