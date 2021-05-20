@@ -153,8 +153,17 @@ class GoalController extends Controller
 	{
 		if ($goal->efforts()->count() > 4)
 		{
+			$user = $goal->user;
+
 			$goal->status = 1;
-			$goal->save();
+			$goal->save();		
+
+			if ($goal->status == 1 && $user->goal_clear_badge == 0) {
+				$user->goal_clear_badge = 1;
+				session()->flash('badge_message', 'おめでとうございます。達成力の称号を取得しました。');
+				session()->flash('badge_color', 'primary');		
+				$user->save();		
+			}	
 
 			return redirect()
 							->route('mypage.show', ['id' => Auth::user()->id])
