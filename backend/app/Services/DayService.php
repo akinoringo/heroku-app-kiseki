@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Effort;
-use App\Goal;
+use App\Models\Effort;
+use App\Models\Goal;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 

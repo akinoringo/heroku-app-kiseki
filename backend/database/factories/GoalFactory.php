@@ -2,8 +2,8 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Goal;
-use App\User;
+use App\Models\Goal;
+use App\Models\User;
 use Faker\Generator as Faker;
 
 $factory->define(Goal::class, function (Faker $faker) {

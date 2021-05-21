@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Effort;
-use App\User;
+use App\Models\Effort;
+use App\Models\User;
 use Carbon\Carbon;
 
 class RankingService{

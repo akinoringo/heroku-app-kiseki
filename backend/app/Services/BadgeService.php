@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Effort;
-use App\Goal;
-use App\User;
+use App\Models\Effort;
+use App\Models\Goal;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class BadgeService{

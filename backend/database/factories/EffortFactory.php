@@ -2,9 +2,9 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Effort;
-use App\User;
-use App\Goal;
+use App\Models\Effort;
+use App\Models\User;
+use App\Models\Goal;
 use Faker\Generator as Faker;
 
 $factory->define(Effort::class, function (Faker $faker) {

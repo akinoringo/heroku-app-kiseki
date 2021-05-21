@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\User;
-use App\Goal;
-use App\Effort;
+use App\Models\User;
+use App\Models\Goal;
+use App\Models\Effort;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
