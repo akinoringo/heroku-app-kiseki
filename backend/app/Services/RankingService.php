@@ -32,19 +32,31 @@ class RankingService{
 			$users_name = $users->pluck('name');
 			$ids = $users->pluck('id');
 
-			$compared_efforts_count = $efforts_count[0];
+			$compared_efforts_count = $efforts_count[0] + 1;
 
-			$rank = 1;
+			$rank = 0;
 			$i = 0;
+			$plus = 0;
 			foreach ($efforts_count as $value) {
 
-				if ($value < $compared_efforts_count) {
-					$rank++;
-				}
-				
-				array_push($ranked_users, ['rank' => $rank, 'name'=> $users_name[$i], 'efforts_count' => $efforts_count[$i], 'id' => $ids[$i]]);		
+				if ($value == $compared_efforts_count) {
+					$plus += 1; 
+				}				
 
-				$i++;		
+				if ($value < $compared_efforts_count) {
+					$rank += $plus + 1;
+					$plus =0;
+				}
+
+				if ($rank >= 10 ) {
+					break;
+				}	
+				
+				array_push($ranked_users, ['rank' => $rank, 'name'=> $users_name[$i], 'efforts_count' => $efforts_count[$i], 'id' => $ids[$i]]);	
+
+				$compared_efforts_count = $value;	
+				$i++;
+	
 			}	
 
 		}
