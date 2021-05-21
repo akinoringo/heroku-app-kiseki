@@ -54,7 +54,7 @@ class EffortController extends Controller
 		$efforts = $this->EffortService->getEffortsAll($search);
 
 		// 積み上げ回数順でランキング
-		$ranked_users = $this->RankingService->ranking();
+		$ranked_users = $this->RankingService->rankingEffortsCount();
 
 		// フォロー中の人の軌跡を検索語でソートして作成順に並び替えて取得
 		if (Auth::check()) {

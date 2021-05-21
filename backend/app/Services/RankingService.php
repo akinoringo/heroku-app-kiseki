@@ -12,7 +12,7 @@ class RankingService{
 		* 今月の積み上げ回数が多い順にユーザーを取得して連想配列で返す		
 		* @return  array
 	*/
-	public function ranking() {
+	public function rankingEffortsCount() {
 
 		// ユーザーの軌跡登録数をカウントして、多い順に配列で取得する。
 		$users = User::withCount(['efforts' => function ($efforts) {
