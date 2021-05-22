@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Goal;
 use App\Models\User;
+use App\Models\Tag;
 use App\Http\Requests\GoalRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
@@ -43,8 +44,12 @@ class GoalController extends Controller
 		// 未達成の目標が上限(３つ)の場合は、新たに作成不可。
 		if ($number !== 3){
 
-			return view('goals.create');
-		} else {
+      $allTagNames = Tag::all()->map(function ($tag) {
+          return ['text' => $tag->name];
+      });				
+
+			return view('goals.create', ['allTagNames' => $allTagNames]);
+		} else {				
 
 			return redirect()
 				->route('mypage.show', ['id' => Auth::user()->id])
@@ -68,6 +73,11 @@ class GoalController extends Controller
 		$goal->user_id = $request->user()->id;
 		$goal->save();
 
+	  $request->tags->each(function ($tagName) use ($goal) {
+	      $tag = Tag::firstOrCreate(['name' => $tagName]);
+	      $goal->tags()->attach($tag);
+	  });			
+
 		return redirect()
 						->route('mypage.show', ['id' => Auth::user()->id])
 						->with([
@@ -86,8 +96,22 @@ class GoalController extends Controller
 	{
 		if ($goal->status === 0){
 
-			return view('goals.edit', ['goal' => $goal]);			
-		} else {
+			// Vue Tags Inputでは、タグ名にtextというキーが必要という仕様
+      $tagNames = $goal->tags->map(function ($tag) {
+          return ['text' => $tag->name];
+      });				
+
+      $allTagNames = Tag::all()->map(function ($tag) {
+          return ['text' => $tag->name];
+      });			
+
+			return view('goals.edit', [
+				'goal' => $goal,
+				'tagNames' => $tagNames,
+				'allTagNames' => $allTagNames,
+			]);	
+
+		} else {		
 
 			return redirect()
 							->route('mypage.show', ['id' => Auth::user()->id])
@@ -108,6 +132,13 @@ class GoalController extends Controller
 	public function update(GoalRequest $request, Goal $goal)
 	{
 		$goal->fill($request->all())->save();
+
+    $goal->tags()->detach();
+    $request->tags->each(function ($tagName) use ($goal) {
+        $tag = Tag::firstOrCreate(['name' => $tagName]);
+        $goal->tags()->attach($tag);
+    });
+
 		return redirect()
 						->route('mypage.show', ['id' => Auth::user()->id])
 						->with([

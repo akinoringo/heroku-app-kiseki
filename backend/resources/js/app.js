@@ -10,6 +10,7 @@ import EffortLike from './components/EffortLike'
 import FollowButton from './components/FollowButton'
 import BarChart from './components/BarChart'
 import EffortChart from './components/EffortChart'
+import GoalTagsInput from './components/GoalTagsInput'
 import axios from 'axios'
 
 Vue.prototype.$http = axios;
@@ -31,6 +32,7 @@ const app = new Vue({
 		FollowButton,
 		BarChart,
 		EffortChart,
+		GoalTagsInput,
 	}
 })
 

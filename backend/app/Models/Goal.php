@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Goal extends Model
 {
@@ -27,5 +27,11 @@ class Goal extends Model
   {
       return $this->hasMany('App\Models\Effort');
   }
+
+  public function tags(): BelongsToMany
+  {
+      return $this->belongsToMany('App\Models\Tag')->withTimestamps();
+  }  
+
 
 }
