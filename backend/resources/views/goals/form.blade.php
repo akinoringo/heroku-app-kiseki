@@ -4,6 +4,15 @@
   <span class="small ml-2">目標を簡潔に記入してください ※50字以内</span>
   <input type="text" name="title" class="form-control" placeholder="(例)フルマラソン完走" required value="{{ $goal->title ?? old('title') }}">
 </div>
+
+<div class="form-group">
+  <label>タグ</label>
+  <goal-tags-input
+  >
+  </goal-tags-input>
+</div>
+
+
 <div class="form-group">
   <label>内容</label>
   <span class="small ml-2">
