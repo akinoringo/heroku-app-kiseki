@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Effort;
-use App\User;
+use App\Models\Effort;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class EffortPolicy
@@ -13,7 +13,7 @@ class EffortPolicy
     /**
      * Determine whether the user can view any efforts.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @return mixed
      */
     public function viewAny(?User $user)
@@ -25,8 +25,8 @@ class EffortPolicy
     /**
      * Determine whether the user can view the effort.
      *
-     * @param  \App\User  $user
-     * @param  \App\Effort  $effort
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Effort  $effort
      * @return mixed
      */
     public function view(?User $user, Effort $effort)
@@ -38,7 +38,7 @@ class EffortPolicy
     /**
      * Determine whether the user can create efforts.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @return mixed
      */
     public function create(User $user)
@@ -50,8 +50,8 @@ class EffortPolicy
     /**
      * Determine whether the user can update the effort.
      *
-     * @param  \App\User  $user
-     * @param  \App\Effort  $effort
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Effort  $effort
      * @return mixed
      */
     public function update(User $user, Effort $effort)
@@ -63,8 +63,8 @@ class EffortPolicy
     /**
      * Determine whether the user can delete the effort.
      *
-     * @param  \App\User  $user
-     * @param  \App\Effort  $effort
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Effort  $effort
      * @return mixed
      */
     public function delete(User $user, Effort $effort)
@@ -77,8 +77,8 @@ class EffortPolicy
     /**
      * Determine whether the user can restore the effort.
      *
-     * @param  \App\User  $user
-     * @param  \App\Effort  $effort
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Effort  $effort
      * @return mixed
      */
     public function restore(User $user, Effort $effort)
@@ -89,8 +89,8 @@ class EffortPolicy
     /**
      * Determine whether the user can permanently delete the effort.
      *
-     * @param  \App\User  $user
-     * @param  \App\Effort  $effort
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Effort  $effort
      * @return mixed
      */
     public function forceDelete(User $user, Effort $effort)

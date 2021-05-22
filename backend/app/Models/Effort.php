@@ -1,6 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models;
+
+use App\Models\User;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,22 +26,22 @@ class Effort extends Model
     //
 	public function goal(): BelongsTo
 	{
-		return $this->belongsTo('App\Goal');
+		return $this->belongsTo('App\Models\Goal');
 	}
 
 	public function user(): BelongsTo
 	{
-		return $this->belongsTo('App\User');
+		return $this->belongsTo('App\Models\User');
 	}
 
 	public function comments(): hasMany
 	{
-		return $this->hasMany('App\Comment');
+		return $this->hasMany('App\Models\Comment');
 	}	
 
 	public function likes():BelongsToMany
 	{
-		return $this->belongsToMany('App\User', 'likes')->withTimestamps();
+		return $this->belongsToMany('App\Models\User', 'likes')->withTimestamps();
 	}
 
 	public function isLikedBy(?User $user):bool

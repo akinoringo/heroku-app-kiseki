@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Effort;
-use App\Goal;
-use App\User;
+use App\Models\Effort;
+use App\Models\Goal;
+use App\Models\User;
 use App\Http\Requests\EffortRequest;
 use App\Services\BadgeService;
 use App\Services\DayService;
@@ -53,18 +53,21 @@ class EffortController extends Controller
 		// 全ての軌跡を検索語でソートして作成順に並び替えて取得
 		$efforts = $this->EffortService->getEffortsAll($search);
 
+		// 全ての目標を作成順に並び替えて取得
+		$goals = Goal::orderBy('created_at', 'desc')->paginate(10);
+
 		// 積み上げ回数順でランキング
-		$ranked_users = $this->RankingService->ranking();
+		$ranked_users = $this->RankingService->rankingEffortsCount();
 
 		// フォロー中の人の軌跡を検索語でソートして作成順に並び替えて取得
 		if (Auth::check()) {
 			$efforts_follow = $this->EffortService->getEffortsFollow($search);
 			
-			return view('home', compact('efforts', 'efforts_follow', 'ranked_users'));				
+			return view('home', compact('goals', 'efforts', 'efforts_follow', 'ranked_users'));				
 		} else {
 			// 誰もフォローしていない場合はnullを代入
 			$efforts_follow = null;
-			return view('home', compact('efforts', 'efforts_follow', 'ranked_users'));
+			return view('home', compact('goals', 'efforts', 'efforts_follow', 'ranked_users'));
 		}
 
 	}

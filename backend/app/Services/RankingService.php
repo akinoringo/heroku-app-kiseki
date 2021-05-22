@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Effort;
-use App\User;
+use App\Models\Effort;
+use App\Models\User;
 use Carbon\Carbon;
 
 class RankingService{
@@ -12,7 +12,7 @@ class RankingService{
 		* 今月の積み上げ回数が多い順にユーザーを取得して連想配列で返す		
 		* @return  array
 	*/
-	public function ranking() {
+	public function rankingEffortsCount() {
 
 		// ユーザーの軌跡登録数をカウントして、多い順に配列で取得する。
 		$users = User::withCount(['efforts' => function ($efforts) {
@@ -32,19 +32,31 @@ class RankingService{
 			$users_name = $users->pluck('name');
 			$ids = $users->pluck('id');
 
-			$compared_efforts_count = $efforts_count[0];
+			$compared_efforts_count = $efforts_count[0] + 1;
 
-			$rank = 1;
+			$rank = 0;
 			$i = 0;
+			$plus = 0;
 			foreach ($efforts_count as $value) {
 
-				if ($value < $compared_efforts_count) {
-					$rank++;
-				}
-				
-				array_push($ranked_users, ['rank' => $rank, 'name'=> $users_name[$i], 'efforts_count' => $efforts_count[$i], 'id' => $ids[$i]]);		
+				if ($value == $compared_efforts_count) {
+					$plus += 1; 
+				}				
 
-				$i++;		
+				if ($value < $compared_efforts_count) {
+					$rank += $plus + 1;
+					$plus =0;
+				}
+
+				if ($rank >= 10 ) {
+					break;
+				}	
+				
+				array_push($ranked_users, ['rank' => $rank, 'name'=> $users_name[$i], 'efforts_count' => $efforts_count[$i], 'id' => $ids[$i]]);	
+
+				$compared_efforts_count = $value;	
+				$i++;
+	
 			}	
 
 		}

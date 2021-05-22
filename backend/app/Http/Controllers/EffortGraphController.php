@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Effort;
-use App\Goal;
-use App\User;
-
+use App\Models\Effort;
+use App\Models\Goal;
+use App\Models\User;
 use DB;
 use Illuminate\Http\Request;
 

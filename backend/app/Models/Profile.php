@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Goal;
-use App\Effort;
-use App\User;
+use App\Models\Goal;
+use App\Models\Effort;
+use App\Models\User;
 
 
 class Profile extends Model
