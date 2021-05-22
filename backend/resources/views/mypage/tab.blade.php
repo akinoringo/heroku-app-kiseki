@@ -29,6 +29,8 @@
     @endforeach    
   </div> 
   <div class="tab-pane fade" id="pills-graph" role="tabpanel" aria-labelledby="pills-graph-tab">
+    @if ($goals->isNotEmpty())
     <effort-chart userid='@json($id)'></effort-chart>
+    @endif
   </div>    
 </div>
