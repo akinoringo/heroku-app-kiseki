@@ -2429,23 +2429,16 @@ __webpack_require__.r(__webpack_exports__);
     initialTags: {
       type: Array,
       "default": []
+    },
+    autocompleteItems: {
+      type: Array,
+      "default": []
     }
   },
   data: function data() {
     return {
       tag: '',
-      tags: this.initialTags,
-      autocompleteItems: [{
-        text: 'Spain'
-      }, {
-        text: 'France'
-      }, {
-        text: 'USA'
-      }, {
-        text: 'Germany'
-      }, {
-        text: 'China'
-      }]
+      tags: this.initialTags
     };
   },
   computed: {

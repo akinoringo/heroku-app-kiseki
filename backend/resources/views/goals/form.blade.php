@@ -9,6 +9,7 @@
   <label>タグ</label>
   <goal-tags-input
    :initial-tags='@json($tagNames ?? [])'
+   :autocomplete-items='@json($allTagNames ?? [])'
   >
   </goal-tags-input>
 </div>

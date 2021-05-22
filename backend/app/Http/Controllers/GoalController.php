@@ -44,8 +44,12 @@ class GoalController extends Controller
 		// 未達成の目標が上限(３つ)の場合は、新たに作成不可。
 		if ($number !== 3){
 
-			return view('goals.create');
-		} else {		
+      $allTagNames = Tag::all()->map(function ($tag) {
+          return ['text' => $tag->name];
+      });				
+
+			return view('goals.create', ['allTagNames' => $allTagNames]);
+		} else {				
 
 			return redirect()
 				->route('mypage.show', ['id' => Auth::user()->id])
@@ -92,19 +96,25 @@ class GoalController extends Controller
 	{
 		if ($goal->status === 0){
 
-			return view('goals.edit', ['goal' => $goal]);			
-		} else {
-
 			// Vue Tags Inputでは、タグ名にtextというキーが必要という仕様
       $tagNames = $goal->tags->map(function ($tag) {
           return ['text' => $tag->name];
+      });				
+
+      $allTagNames = Tag::all()->map(function ($tag) {
+          return ['text' => $tag->name];
       });			
 
+			return view('goals.edit', [
+				'goal' => $goal,
+				'tagNames' => $tagNames,
+				'allTagNames' => $allTagNames,
+			]);	
+
+		} else {		
+
 			return redirect()
-							->route('mypage.show', [
-								'id' => Auth::user()->id,
-								'tagNames' => $tagNames,
-							])
+							->route('mypage.show', ['id' => Auth::user()->id])
 							->with([
 								'flash_message' => 'クリア済みの目標は編集できません',
 								'color' => 'danger'
