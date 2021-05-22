@@ -20,13 +20,14 @@
 </head>
 
 <body>
-  <div id="app" class="common-wrapper">
-    @include('layouts.nav')
-    @include('layouts.flash')
-    @yield('content')
+  <div id="app">
+    <div class="common-wrapper">
+      @include('layouts.nav')
+      @include('layouts.flash')
+      @yield('content')
+    </div>
   </div>
   @include('layouts.footer')
-
   <script src="{{ mix('js/app.js') }}"></script>
   <!-- JQuery -->
 {{--   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> --}}
