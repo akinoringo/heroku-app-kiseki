@@ -26,6 +26,7 @@
     },
     "dependencies": {
         "chart.js": "^2.9.4",
-        "vue-chartjs": "^3.5.1"
+        "vue-chartjs": "^3.5.1",
+        "vue-social-sharing": "^2.4.6"
     }
 }
