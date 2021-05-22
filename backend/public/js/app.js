@@ -2425,10 +2425,16 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     VueTagsInput: _johmun_vue_tags_input__WEBPACK_IMPORTED_MODULE_0___default.a
   },
+  props: {
+    initialTags: {
+      type: Array,
+      "default": []
+    }
+  },
   data: function data() {
     return {
       tag: '',
-      tags: [],
+      tags: this.initialTags,
       autocompleteItems: [{
         text: 'Spain'
       }, {

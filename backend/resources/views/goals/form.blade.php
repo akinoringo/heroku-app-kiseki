@@ -8,6 +8,7 @@
 <div class="form-group">
   <label>タグ</label>
   <goal-tags-input
+   :initial-tags='@json($tagNames ?? [])'
   >
   </goal-tags-input>
 </div>

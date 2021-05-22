@@ -88,6 +88,22 @@
   @endif
 
   </div>
+
+@foreach($goal->tags as $tag)
+  <!-- $loop->first内の処理はforeach内ではじめの一回だけ行われる -->
+  @if($loop->first)
+  <div class="card-body pt-0 pb-2 pl-3">
+    <div class="card-text line-height">
+  @endif
+      <a href="" class="p-1 mt-1 text-muted">
+        {{ $tag->name }}
+      </a>
+  @if($loop->last)
+    </div>
+  </div>
+  @endif
+@endforeach
+
   <div class="card-body pt-0">
     <h3 class="h4 card-title">
       <a class="text-dark" href="{{ route('goals.show', ['goal' => $goal]) }}">

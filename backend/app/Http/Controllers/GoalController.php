@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Goal;
 use App\Models\User;
+use App\Models\Tag;
 use App\Http\Requests\GoalRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
@@ -44,7 +45,7 @@ class GoalController extends Controller
 		if ($number !== 3){
 
 			return view('goals.create');
-		} else {
+		} else {		
 
 			return redirect()
 				->route('mypage.show', ['id' => Auth::user()->id])
@@ -68,6 +69,11 @@ class GoalController extends Controller
 		$goal->user_id = $request->user()->id;
 		$goal->save();
 
+	  $request->tags->each(function ($tagName) use ($goal) {
+	      $tag = Tag::firstOrCreate(['name' => $tagName]);
+	      $goal->tags()->attach($tag);
+	  });			
+
 		return redirect()
 						->route('mypage.show', ['id' => Auth::user()->id])
 						->with([
@@ -89,8 +95,16 @@ class GoalController extends Controller
 			return view('goals.edit', ['goal' => $goal]);			
 		} else {
 
+			// Vue Tags Inputでは、タグ名にtextというキーが必要という仕様
+      $tagNames = $goal->tags->map(function ($tag) {
+          return ['text' => $tag->name];
+      });			
+
 			return redirect()
-							->route('mypage.show', ['id' => Auth::user()->id])
+							->route('mypage.show', [
+								'id' => Auth::user()->id,
+								'tagNames' => $tagNames,
+							])
 							->with([
 								'flash_message' => 'クリア済みの目標は編集できません',
 								'color' => 'danger'
@@ -108,6 +122,13 @@ class GoalController extends Controller
 	public function update(GoalRequest $request, Goal $goal)
 	{
 		$goal->fill($request->all())->save();
+
+    $goal->tags()->detach();
+    $request->tags->each(function ($tagName) use ($goal) {
+        $tag = Tag::firstOrCreate(['name' => $tagName]);
+        $goal->tags()->attach($tag);
+    });
+
 		return redirect()
 						->route('mypage.show', ['id' => Auth::user()->id])
 						->with([

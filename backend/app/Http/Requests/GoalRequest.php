@@ -27,7 +27,7 @@ class GoalRequest extends FormRequest
             //
             'title' => 'required|max:50',
             'content' => 'required|max:500',
-            'tags' => 'json|regex:/^(?!.*\s).+$/u|regex:/^(?!.*\/).*$/u'
+            'tags' => 'json|regex:/^(?!.*\s).+$/u|regex:/^(?!.*\/).*$/u',
             'goal_time' => 'integer|min:10',
             'deadline' => 'required|date|after:today',
         ];
