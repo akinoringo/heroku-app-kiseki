@@ -148,7 +148,5 @@ http://localhost
 ### 軌跡入力画面
 <img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249771-429e5400-bbd6-11eb-98cb-c391be3ed774.png">
 
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249786-65c90380-bbd6-11eb-9bce-baef8b778b1a.png">
-
 ## インフラ構成図
 <img width="700" alt="Cloud Image" src="https://user-images.githubusercontent.com/73481750/117590129-ee708a00-b168-11eb-80be-ef54b3f64890.png">
