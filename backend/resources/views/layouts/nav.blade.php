@@ -1,5 +1,5 @@
 @auth
-<nav class="navbar navbar-expand navbar-dark bg-dark">
+<nav class="navbar navbar-expand navbar-dark" style="background-color: #008000">
 
   <a class="navbar-brand font-weight-bold" href="/"><i class="fas fa-shoe-prints fa-rotate-270 mr-2"></i>Kiseki</a>
 
@@ -42,11 +42,11 @@
 
 @guest
 <!--Navbar-->
-<nav class="navbar navbar-dark bg-dark lighten-4 mb-4">
+<nav class="navbar navbar-dark lighten-4 mb-4" style="background-color: #008000">
 
   <!-- Navbar brand -->
-  <a class="navbar-brand font-weight-bold" href="/"><i class="fas fa-shoe-prints fa-rotate-270 mr-2"></i> Kiseki</a>s
-
+  <a class="navbar-brand font-weight-bold" href="/"><i class="fas fa-shoe-prints fa-rotate-270 mr-2"></i> Kiseki</a>
+  
   <!-- Collapse button -->
   <button class="navbar-toggler toggler-example navbar-dark darken-3" type="button" data-toggle="collapse"
     data-target="#navbarSupportedContent41" aria-controls="navbarSupportedContent41" aria-expanded="false"

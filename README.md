@@ -7,14 +7,14 @@
 - 達成したい目標がたくさんあり、一つに集中して継続できない
 
 ### Kisekiの特徴
-- 目標と目標達成に向けて継続して取り組みたい時間を登録して、日々の積み上げを記録するだけだから簡単
+- 目標と目標達成期限を登録して、日々の積み上げを記録するだけだから簡単
 - ほかの人の目標や軌跡が確認できるからモチベーションが上がる
 - 一度に登録できる目標は３つまでだから、本当に達成したい目標に向けて頑張れる
 
 ### 使い方
-1. 目標と目標達成に向けて継続したい時間を登録する
-2. 日々の軌跡と継続時間を記録する
-3. 目標時間に到達したらクリア。次の目標を登録しましょう！
+1. 目標と目標達成期限を登録する
+2. 日々の軌跡(内容/反省点/取組時間)を記録する
+3. 日々の軌跡を積み上げて目標を達成しよう！
 
 ## URL
 http://app-kiseki.com
@@ -62,6 +62,14 @@ http://app-kiseki.com
 
 - 軌跡投稿機能(CRUD)
 	- 目標達成に向けての頑張り(軌跡)の新規作成、一覧表示、削除
+
+- コメント機能
+
+- 積み上げ回数/時間の可視化(vue-chartjsによるグラフ機能)
+
+- SNSシェア機能(vue-social-sharingによるSNSシェア機能)
+
+- タグ入力(vue-tag-input)/検索機能
 
 - ページネーション機能
 
@@ -115,21 +123,32 @@ http://localhost
 ## アプリ使用画面
 
 ### トップページ
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/117590686-a6069b80-b16b-11eb-9add-c18b6fc58ab9.png">
+<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249623-f69edf80-bbd4-11eb-921a-4f402ebbc1d3.png">
 
 <img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/117590745-c6365a80-b16b-11eb-97f2-c9ad731911ea.png">
 
-### みんなの軌跡一覧
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/117590766-de0dde80-b16b-11eb-970d-6c74e05ca80e.png">
+### SNSシェア/ランキング/みんなの投稿一覧
+<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249649-36fe5d80-bbd5-11eb-8a4d-a1f6a0c3345a.png">
 
-### マイページ
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/117590790-04337e80-b16c-11eb-8631-64eed630b504.png">
+### タグ検索機能
+<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249801-95780b80-bbd6-11eb-8c8e-29cdfbe0e3cc.png">
+
+### コメント/いいね機能
+<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249827-d1ab6c00-bbd6-11eb-9e70-d4254f6256fd.png">
+
+### マイページ/フォロー/フォロワー
+<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249704-a411f300-bbd5-11eb-8561-2f2f19011b4e.png">
 
 ### 獲得バッジの表示
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/117773175-f87eaf80-b272-11eb-8a5f-21e8d45ee4fd.png">
+<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249732-dd4a6300-bbd5-11eb-9b18-3b351a47cd68.png">
+
+### 目標入力画面/タグ追加機能
+<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249751-1551a600-bbd6-11eb-8f75-8bbc0da3ef9d.png">
 
 ### 軌跡入力画面
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/117590808-1ad9d580-b16c-11eb-920b-9e7288e231a0.png">
+<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249771-429e5400-bbd6-11eb-98cb-c391be3ed774.png">
+
+<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249786-65c90380-bbd6-11eb-9bce-baef8b778b1a.png">
 
 ## インフラ構成図
 <img width="700" alt="Cloud Image" src="https://user-images.githubusercontent.com/73481750/117590129-ee708a00-b168-11eb-80be-ef54b3f64890.png">
