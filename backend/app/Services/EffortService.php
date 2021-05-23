@@ -19,7 +19,7 @@ class EffortService{
 							->where(function($query) use ($search) {
 								$query->orwhere('title', 'like', "%{$search}%")
 											->orwhere('content', 'like', "%{$search}%");
-							})->paginate(10);
+							})->paginate(10, ["*"], 'effortspage');
 
 		return $efforts;
 	}
@@ -54,7 +54,7 @@ class EffortService{
 			->where(function($query) use ($search) {
 									$query->orwhere('title', 'like', "%{$search}%")
 												->orwhere('content', 'like', "%{$search}%");
-			})->paginate(10);	
+			})->paginate(10, ["*"], "followingeffortspage");	
 
 		return $efforts_follow;
 	}	
