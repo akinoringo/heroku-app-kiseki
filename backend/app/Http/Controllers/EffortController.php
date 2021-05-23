@@ -54,7 +54,8 @@ class EffortController extends Controller
 		$efforts = $this->EffortService->getEffortsAll($search);
 
 		// 全ての目標を作成順に並び替えて取得
-		$goals = Goal::orderBy('created_at', 'desc')->paginate(10);
+		$goals = Goal::orderBy('created_at', 'desc')
+			->paginate(10, ["*"],'goalspage');
 
 		// 積み上げ回数順でランキング
 		$ranked_users = $this->RankingService->rankingEffortsCount();
