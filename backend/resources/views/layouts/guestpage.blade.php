@@ -50,14 +50,14 @@
         <i class="fas fa-3x fa-pen text-primary mb-4"></i>
         <h5>1. 目標を入力</h5>
         <p class="text-muted">
-          目標と目標継続時間を入力
+          目標と目標達成期限を入力
         </p>
       </div>
       <div class="col-lg-4 col-md-6 text-center mb-2">
         <i class="fas fa-3x fa-database text-primary mb-4"></i>
         <h5>2. 軌跡を記録</h5>
         <p class="text-muted">
-          日々の軌跡と取組時間を記録<br> 
+          日々の軌跡(内容/時間など)を記録<br> 
         </p>        
       </div>
       <div class="col-lg-4 col-md-6 text-center mb-2">
