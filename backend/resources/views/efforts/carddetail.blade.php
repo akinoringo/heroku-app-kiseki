@@ -89,7 +89,20 @@
     <div class="card-text mb-3">
       {{ $effort->content }}
     </div>
-     
+    @if (isset($effort->reflection))
+    <div class="card-text mb-3">
+      <反省点><br>
+      {{ $effort->reflection }}
+    </div>    
+    @endif
+
+    @if (isset($effort->enthusiasm))
+    <div class="card-text mb-3">
+      <今後の意気込み><br>
+      {{ $effort->enthusiasm }}
+    </div>    
+    @endif      
+
     <div class="card-text mb-1">
       @if (isset($effort->effort_time))
       <span class="border px-1 text-dark">取組時間</span>
