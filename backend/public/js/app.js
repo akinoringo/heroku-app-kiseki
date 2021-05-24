@@ -1986,7 +1986,8 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     chartData: {
       type: Object
-    }
+    },
+    ylabel: String
   },
   methods: {
     renderBarChart: function renderBarChart() {
@@ -1996,10 +1997,16 @@ __webpack_require__.r(__webpack_exports__);
             stacked: true
           }],
           yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: this.ylabel,
+              fontSize: 16
+            },
             stacked: true,
             ticks: {
               beginAtZero: true,
-              min: 0
+              min: 0,
+              suggestedMax: 8
             }
           }]
         }
@@ -77665,7 +77672,7 @@ var render = function() {
           }
         ],
         ref: "countChart",
-        attrs: { chartData: _vm.countData }
+        attrs: { chartData: _vm.countData, ylabel: "積み上げ回数 (回)" }
       }),
       _vm._v(" "),
       _c("bar-chart", {
@@ -77678,7 +77685,7 @@ var render = function() {
           }
         ],
         ref: "timeChart",
-        attrs: { chartData: _vm.timeData }
+        attrs: { chartData: _vm.timeData, ylabel: "積み上げ時間 (時間)" }
       })
     ],
     1
