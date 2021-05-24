@@ -23,6 +23,7 @@ class EffortController extends Controller
 	protected $day_service;
 	protected $effort_service;
 	protected $goal_service;
+	protected $ranking_service;
 	protected $time_service;
   
 	public function __construct(RankingService $ranking_service, BadgeService $badge_service, DayService $day_service, EffortService $effort_service, GoalService $goal_service, TimeService $time_service)
@@ -138,7 +139,6 @@ class EffortController extends Controller
 		$efforts = $this->EffortService->getEffortsOfGoal($goal);
 		$goal->efforts_time = $this->TimeService->sumEffortsTime($efforts);	
 
-		// 目標時間>合計継続時間であれば目標ステータスを1に更新
 		// $this->GoalService->updateGoalStatus($goal, $efforts);			
 		$goal->save();
 

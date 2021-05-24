@@ -60,4 +60,18 @@ class GoalService{
 
 	}	
 
+	/**
+		* 未達成の目標数をカウントする
+		* @param Goal $goal
+		* @return  int $number
+	*/
+	public function countGoalsOnProgress($user) {
+		$number = Goal::where('user_id', $user->id)
+			->where(function($goals) {
+				$goals->where('status', 0);
+		})->count();
+
+		return $number;			
+	}
+
 }

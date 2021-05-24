@@ -84,6 +84,59 @@ class EffortService{
 		return array($efforts_yesterday, $efforts_today);
 	}	
 
+  /**
+    * 今週の日別の積み上げ回数を目標ごとに取得する
+    * @return Array
+  */  
+  public function getEffortsCountOnWeek($goals, $daysOnWeek) {
+    for ($i=0; $i < count($goals) ; $i++) {
+      for ($j=0; $j < count($daysOnWeek) ; $j++) {
+        $effortsOnWeek[$i] = Effort::where('goal_id', $goals[$i]->id)
+          ->where(function ($query) use ($daysOnWeek, $j) {
+            $query->whereDate('created_at', $daysOnWeek[$j]);
+          });
+
+        if ($effortsOnWeek[$i]->exists()) {
+          $effortsCountOnWeek[$i][$j] = $effortsOnWeek[$i]->get()->count();
+
+        } else {
+
+          $effortsCountOnWeek[$i][$j] = 0;
+
+        }
+      }       
+    }    
+
+    return $effortsCountOnWeek; 
+  
+  } 
+
+
+  /**
+    * 今週の日別の積み上げ時間を目標ごとに取得する
+    * @return Array
+  */ 
+  public function getEffortsTimeTotalOnWeek($goals, $daysOnWeek) {
+    for ($i=0; $i < count($goals) ; $i++) {
+      for ($j=0; $j < count($daysOnWeek) ; $j++) {
+        $effortsOnWeek[$i] = Effort::where('goal_id', $goals[$i]->id)
+          ->where(function ($query) use ($daysOnWeek, $j) {
+            $query->whereDate('created_at', $daysOnWeek[$j]);
+          });
+
+        if ($effortsOnWeek[$i]->exists()) {
+          $effortsTimeOnWeek[$i][$j] = $effortsOnWeek[$i]->pluck('effort_time')->all();
+          $effortsTimeTotalOnWeek[$i][$j] = array_sum($effortsTimeOnWeek[$i][$j]);                  
+        }
+        else {
+          $effortsTimeTotalOnWeek[$i][$j] = 0;
+        }
+      }       
+    }    
+
+    return $effortsTimeTotalOnWeek; 
+  
+  }  
 
 
 

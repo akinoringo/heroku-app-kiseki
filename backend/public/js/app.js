@@ -2081,11 +2081,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.countData = Object.assign({}, this.countData, {
-        labels: this.apiEffortData.daysOnWeek,
+        labels: this.apiEffortData.daysOnWeekFormated,
         datasets: this.countdatasets
       });
       this.timeData = Object.assign({}, this.timeData, {
-        labels: this.apiEffortData.daysOnWeek,
+        labels: this.apiEffortData.daysOnWeekFormated,
         datasets: this.timedatasets
       });
       this.$nextTick(function () {

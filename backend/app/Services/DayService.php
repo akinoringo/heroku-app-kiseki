@@ -44,4 +44,48 @@ class DayService{
 		} 
 
 	}
+
+  /**
+    * 今週の日付を取得する
+    * @return Array
+  */ 
+  public function getDaysOnWeek() {
+    //1週間の日数
+    $numOfDays = 7; 
+
+    //週の始まりの日付
+    $startOfWeek = now()->startOfWeek();
+    $daysOnWeek[0] = $startOfWeek->format('Y-m-d');    
+
+    //Carbonのインスタンスが上書きされないようにcopy()して日付を加算
+    for ($i=1; $i < $numOfDays ; $i++) {
+      $daysOnWeek[$i] = $startOfWeek->copy()->addDay($i)->format('Y-m-d');
+    }
+
+    return $daysOnWeek;
+
+  }
+
+  /**
+    * 今週の日付を取得する(Format:n/d)
+    * @return Array
+  */ 
+  public function getDaysOnWeekFormated() {
+    //1週間の日数
+    $numOfDays = 7; 
+
+    //週の始まりの日付
+    $startOfWeek = now()->startOfWeek();
+    $daysOnWeek[0] = $startOfWeek->format('n/d');    
+
+    //Carbonのインスタンスが上書きされないようにcopy()して日付を加算
+    for ($i=1; $i < $numOfDays ; $i++) {
+      $daysOnWeek[$i] = $startOfWeek->copy()->addDay($i)->format('n/d');
+    }
+
+    return $daysOnWeek;
+
+  }  	
+
+
 }
