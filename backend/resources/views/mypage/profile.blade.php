@@ -47,15 +47,15 @@
           </follow-button>
         @endif        
         </div>
-        <div class="mt-2">
-        @if ( $user->efforts_time_badge == 1)
-          <img src="/images/efforttime.png" class="rounded-circle" style="object-fit: cover; width: 75px; height: 75px;">
+        <div class="mt-3">
+        @if ( $user->efforts_time_badge === 1)
+          <img src="/images/badge_perseverance.svg" class="rounded-circle" style="object-fit: cover; width: 80px; height: 80px;">
         @endif
-        @if ( $user->stacking_days_badge == 1)
-         <img src="/images/effortday.png" class="rounded-circle" style="object-fit: cover; width: 75px; height: 75px;">
+        @if ( $user->stacking_days_badge === 1)
+         <img src="/images/badge_continuity.svg" class="rounded-circle" style="object-fit: cover; width: 80px; height: 80px;">
         @endif
-        @if ( $user->goal_clear_badge == 1)
-         <img src="/images/goalclear.png" class="rounded-circle" style="object-fit: cover; width: 75px; height: 75px;">   
+        @if ( $user->goal_clear_badge === 1)
+         <img src="/images/badge_achieve.svg" class="rounded-circle" style="object-fit: cover; width: 80px; height: 80px;">   
         @endif                               
         </div>         
 
