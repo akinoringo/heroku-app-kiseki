@@ -2,7 +2,7 @@
 
 @section('content')
   <div class="container">
-    @include('efforts.card')
+    @include('efforts.carddetail')
 
     <div class="row p-3">   
       <div class="col-12">   
