@@ -7,10 +7,10 @@
 			<input type="radio" v-model="chartType" value="2">積み上げた時間
 		</label>		
 		<bar-chart 
-			:chartData="countData" ref="countChart" v-show="chartType === '1' ">
+			:chartData="countData" ylabel="積み上げ回数 (回)" ref="countChart" v-show="chartType === '1' ">
 		</bar-chart>		
 		<bar-chart 
-			:chartData="timeData" ref="timeChart" v-show="chartType === '2' ">
+			:chartData="timeData" ylabel="積み上げ時間 (時間)" ref="timeChart" v-show="chartType === '2' ">
 		</bar-chart>
 	</div>
 </template>

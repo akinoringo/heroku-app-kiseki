@@ -142,6 +142,9 @@ http://localhost
 ### 獲得バッジの表示
 <img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119312057-d17da000-bcac-11eb-943c-ba94eb5fb91a.png">
 
+### 積み上げのグラフ表示
+<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119334748-6e990280-bcc6-11eb-9523-daf7fb8c6417.png">
+
 ### 目標入力画面/タグ追加機能
 <img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249751-1551a600-bbd6-11eb-8f75-8bbc0da3ef9d.png">
 

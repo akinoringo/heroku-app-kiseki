@@ -28,9 +28,13 @@
       @include('goals.card')
     @endforeach    
   </div> 
-  <div class="tab-pane fade" id="pills-graph" role="tabpanel" aria-labelledby="pills-graph-tab">
+  <div class="tab-pane fade graph-area-responsive d-flex" id="pills-graph" role="tabpanel" aria-labelledby="pills-graph-tab">
     @if ($goals->isNotEmpty())
-    <effort-chart userid='@json($id)'></effort-chart>
+    <div>         
+      <div class="graph-area">        
+        <effort-chart userid='@json($id)'></effort-chart>
+      </div>
+    </div>
     @endif
   </div>    
 </div>
