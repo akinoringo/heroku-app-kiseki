@@ -140,7 +140,7 @@ http://localhost
 <img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249704-a411f300-bbd5-11eb-8561-2f2f19011b4e.png">
 
 ### 獲得バッジの表示
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249732-dd4a6300-bbd5-11eb-9b18-3b351a47cd68.png">
+<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119312057-d17da000-bcac-11eb-943c-ba94eb5fb91a.png">
 
 ### 目標入力画面/タグ追加機能
 <img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249751-1551a600-bbd6-11eb-8f75-8bbc0da3ef9d.png">
