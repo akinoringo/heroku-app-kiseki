@@ -17,7 +17,6 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/css/mdb.min.css" rel="stylesheet">
   <!-- style -->
   <link href="{{ asset('css/common.css') }}" rel="stylesheet">
-  <link href="{{ asset('css/graph.css') }}" rel="stylesheet">
 </head>
 
 <body>

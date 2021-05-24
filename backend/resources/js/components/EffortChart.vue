@@ -47,11 +47,11 @@ export default {
 	methods: {
 		setChart() {
 			this.countData = Object.assign({}, this.countData, {
-				labels: this.apiEffortData.daysOnWeek,
+				labels: this.apiEffortData.daysOnWeekFormated,
 				datasets: this.countdatasets,
 			});			
 			this.timeData = Object.assign({}, this.timeData, {
-				labels: this.apiEffortData.daysOnWeek,
+				labels: this.apiEffortData.daysOnWeekFormated,
 				datasets: this.timedatasets,
 			});
 			this.$nextTick(() => {

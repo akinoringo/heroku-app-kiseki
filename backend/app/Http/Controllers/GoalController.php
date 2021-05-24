@@ -2,18 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Effort;
 use App\Models\Goal;
 use App\Models\User;
 use App\Models\Tag;
 use App\Http\Requests\GoalRequest;
+use App\Services\GoalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
 
 class GoalController extends Controller
 {
-  // GoalPolicyでCRUD操作を制限
-	public function __construct()
+	protected $goal_service;
+
+	public function __construct(GoalService $goal_service)
 	{
+		$this->GoalService = $goal_service;
+		// GoalPolicyでCRUD操作を制限
 		$this->authorizeResource(Goal::class, 'goal');
 	}
 
@@ -24,9 +29,13 @@ class GoalController extends Controller
 	*/
 	public function show(Goal $goal)
 	{
+		$efforts = Effort::where('goal_id', $goal->id)
+			->orderBy('created_at', 'desc')
+			->paginate(3);
+
 		return view('goals.show', [
 			'goal' => $goal,
-			'user' => Auth::user()
+			'efforts' => $efforts,
 		]);
 	}	
 
@@ -39,7 +48,7 @@ class GoalController extends Controller
 		$user = Auth::user();
 
 		// ユーザーに紐づく目標を取得し、ステータスが未達成(statu:0)の目標数をカウント。
-		$number = $this->GoalCount($user);
+		$number = $this->GoalService->countGoalsOnProgress($user);
 
 		// 未達成の目標が上限(３つ)の場合は、新たに作成不可。
 		if ($number !== 3){
@@ -213,18 +222,5 @@ class GoalController extends Controller
 
 
 	}		
-
-	/**
-		* 未達成の目標数をカウントする
-		* @param Goal $goal
-		* @return  int $number
-	*/
-	private function GoalCount(User $user) {
-		$number = Goal::where('user_id', $user->id)
-			->where(function($goals) {
-				$goals->where('status', 0);
-		})->count();
-
-		return $number;		
-	}	
+	
 }
