@@ -93,8 +93,10 @@ class EffortController extends Controller
 		* @return  \Illuminate\Http\Response
 	*/
 	public function create(){
+		
 		// 自身の未達成の目標を取得
-		$goals = $this->GoalService->myGoalsGet();
+		$user = Auth::user();
+		$goals = $this->GoalService->getGoalsOnProgress($user);
 
 		// 未達成の目標がない場合は、マイページへリダイレクト
 		if (!isset($goals[0])) {

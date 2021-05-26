@@ -18,7 +18,7 @@ class GoalService{
 	{
 		// Serviceクラスからインスタンスを作成
 		$this->TimeService = $time_service;
-		
+
 		// RepositoryのInterfaceのインスタンス化
 		$this->GoalRepository = $goal_repository;
 	}
@@ -28,14 +28,30 @@ class GoalService{
 		* @param Goal $goal
 		* @return  Builder
 	*/
-	public function myGoalsGet() {
-		$goals = Goal::where('user_id', Auth::user()->id)
-							->where(function($goals){
-								$goals->where('status', 0);
-							})->get();
+	public function getGoalsOnProgress($user) {
+		// 未達成の目標を取得
+		$goalsOnProgress = $this->GoalRepository->getGoalsOnProgress($user);
 
-		return $goals;		
+		return $goalsOnProgress;		
 	}	
+
+
+	/**
+		* 未達成の目標数をカウントする
+		* @param Goal $goal
+		* @return  int $number
+	*/
+	public function countGoalsOnProgress($user) {
+
+		// 未達成の目標をRepository層で取得
+		$goalsOnProgress = $this->GoalRepository->getGoalsOnProgress($user);
+
+		// 目標数を算出
+		$count = $goalsOnProgress->count();
+
+		return $count;			
+	}
+
 
 	/** 
 		* 軌跡の合計時間を計算し、目標ステータスを更新する
@@ -65,20 +81,6 @@ class GoalService{
 
 	}	
 
-	/**
-		* 未達成の目標数をカウントする
-		* @param Goal $goal
-		* @return  int $number
-	*/
-	public function countGoalsOnProgress($user) {
 
-		// 未達成の目標をRepository層で取得
-		$goalsOnProgress = $this->GoalRepository->getGoalsOnProgress($user);
-
-		// 目標数を算出
-		$count = $goalsOnProgress->count();
-
-		return $count;			
-	}
 
 }

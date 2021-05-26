@@ -7,6 +7,7 @@ use App\Models\Goal;
 use App\Models\User;
 use App\Models\Tag;
 use App\Http\Requests\GoalRequest;
+use App\Repositories\Goal\GoalRepositoryInterface as GoalRepository;
 use App\Services\GoalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
@@ -14,12 +15,16 @@ use Illuminate\Support\Facades\Auth;
 class GoalController extends Controller
 {
 	protected $goal_service;
+	protected $goal_repository;	
 
-	public function __construct(GoalService $goal_service)
+	public function __construct(GoalService $goal_service, GoalRepository $goal_repository)
 	{
+		// Serviceクラスからインスタンスを作成
 		$this->GoalService = $goal_service;
+		// RepositoryのInterfaceのインスタンス化
+		$this->GoalRepository = $goal_repository;		
 		// GoalPolicyでCRUD操作を制限
-		$this->authorizeResource(Goal::class, 'goal');
+		$this->authorizeResource(Goal::class, 'goal');		
 	}
 
 	/**
@@ -28,12 +33,12 @@ class GoalController extends Controller
 		* @return  \Illuminate\Http\Response
 	*/
 	public function create() {
-		$user = Auth::user();
 
-		// ユーザーに紐づく目標を取得し、ステータスが未達成(statu:0)の目標数をカウント。
+		// 自身の未達成の目標数をカウント。
+		$user = Auth::user();
 		$number = $this->GoalService->countGoalsOnProgress($user);
 
-		// 未達成の目標が上限(３つ)の場合は、新たに作成不可。
+		// 未達成の目標数が上限に達していない場合、新たに作成可能
 		if ($number !== 3){
 
       $allTagNames = Tag::all()->map(function ($tag) {
@@ -41,7 +46,8 @@ class GoalController extends Controller
       });				
 
 			return view('goals.create', ['allTagNames' => $allTagNames]);
-		} else {				
+
+		} else { // 未達成の目標数が上限に達していない場合、新たに作成可能	
 
 			return redirect()
 				->route('mypage.show', ['id' => $user->id])
@@ -50,6 +56,7 @@ class GoalController extends Controller
 				'color' => 'danger'
 			]);
 		}
+
 	}
 
 	/**
@@ -59,11 +66,9 @@ class GoalController extends Controller
 		* @return  \Illuminate\Http\RedirectResponse
 	*/
 	public function store(GoalRequest $request, Goal $goal) {
-		// フォームリクエストで取得した情報をフィルターして保存
-		$goal->fill($request->all());
 
-		$goal->user_id = $request->user()->id;
-		$goal->save();
+		// フォームリクエストで取得した情報をフィルターして保存
+		$this->GoalRepository->storeGoal($request, $goal);
 
 	  $request->tags->each(function ($tagName) use ($goal) {
 	      $tag = Tag::firstOrCreate(['name' => $tagName]);
@@ -140,9 +145,11 @@ class GoalController extends Controller
 	*/
 	public function update(GoalRequest $request, Goal $goal)
 	{
-		$goal->fill($request->all())->save();
+		// $requestの内容を$goalに保存
+		$this->GoalRepository->updateGoal($request, $goal);
 
     $goal->tags()->detach();
+
     $request->tags->each(function ($tagName) use ($goal) {
         $tag = Tag::firstOrCreate(['name' => $tagName]);
         $goal->tags()->attach($tag);
@@ -165,7 +172,7 @@ class GoalController extends Controller
 	{
 		if ($goal->status === 0){
 
-			$goal->delete();
+			$this->GoalRepository->destroy($goal);
 
 			return redirect()
 							->route('mypage.show', ['id' => Auth::user()->id])
@@ -193,10 +200,9 @@ class GoalController extends Controller
 	{
 		if ($goal->efforts()->count() > 4)
 		{
-			$user = $goal->user;
+			$this->GoalRepository->clear($goal);		
 
-			$goal->status = 1;
-			$goal->save();		
+			$user = $goal->user;
 
 			if ($goal->status == 1 && $user->goal_clear_badge == 0) {
 				$user->goal_clear_badge = 1;
