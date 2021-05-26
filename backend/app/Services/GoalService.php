@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Effort;
 use App\Models\Goal;
+use App\Repositories\Goal\GoalRepositoryInterface as GoalRepository;
 use App\Services\TimeService;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,11 +12,15 @@ use Illuminate\Support\Facades\Auth;
 class GoalService{
 
 	protected $time_service;
+	protected $goal_repository;
   
-	public function __construct(TimeService $time_service)
+	public function __construct(TimeService $time_service, GoalRepository $goal_repository)
 	{
 		// Serviceクラスからインスタンスを作成
 		$this->TimeService = $time_service;
+		
+		// RepositoryのInterfaceのインスタンス化
+		$this->GoalRepository = $goal_repository;
 	}
 
 	/** 
@@ -66,12 +71,14 @@ class GoalService{
 		* @return  int $number
 	*/
 	public function countGoalsOnProgress($user) {
-		$number = Goal::where('user_id', $user->id)
-			->where(function($goals) {
-				$goals->where('status', 0);
-		})->count();
 
-		return $number;			
+		// 未達成の目標をRepository層で取得
+		$goalsOnProgress = $this->GoalRepository->getGoalsOnProgress($user);
+
+		// 目標数を算出
+		$count = $goalsOnProgress->count();
+
+		return $count;			
 	}
 
 }

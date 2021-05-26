@@ -23,23 +23,6 @@ class GoalController extends Controller
 	}
 
 	/**
-		* 目標詳細画面の表示
-		* @param Goal $goal
-		* @return  \Illuminate\Http\Response
-	*/
-	public function show(Goal $goal)
-	{
-		$efforts = Effort::where('goal_id', $goal->id)
-			->orderBy('created_at', 'desc')
-			->paginate(3);
-
-		return view('goals.show', [
-			'goal' => $goal,
-			'efforts' => $efforts,
-		]);
-	}	
-
-	/**
 		* 目標作成フォームの表示
 		* @param Request $request
 		* @return  \Illuminate\Http\Response
@@ -61,7 +44,7 @@ class GoalController extends Controller
 		} else {				
 
 			return redirect()
-				->route('mypage.show', ['id' => Auth::user()->id])
+				->route('mypage.show', ['id' => $user->id])
 				->with([
 				'flash_message' => '同時に登録できる目標は3つまでです。',
 				'color' => 'danger'
@@ -94,6 +77,23 @@ class GoalController extends Controller
 							'color' => 'success',
 						]);
 	}
+
+	/**
+		* 目標詳細画面の表示
+		* @param Goal $goal
+		* @return  \Illuminate\Http\Response
+	*/
+	public function show(Goal $goal)
+	{
+		$efforts = Effort::where('goal_id', $goal->id)
+			->orderBy('created_at', 'desc')
+			->paginate(3);
+
+		return view('goals.show', [
+			'goal' => $goal,
+			'efforts' => $efforts,
+		]);
+	}		
 
 	/**
 		* 目標の編集画面
