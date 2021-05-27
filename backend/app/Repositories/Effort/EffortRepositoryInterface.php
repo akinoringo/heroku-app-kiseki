@@ -8,5 +8,7 @@ interface EffortRepositoryInterface
 
 	public function getEffortsOfGoal($goal);	
 
-	public function getEffortsOfFollowee();		
+	public function getEffortsOfFollowee();
+
+	public function getEffortsOfADay($goal, $day);		
 }

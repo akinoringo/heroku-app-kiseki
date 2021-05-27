@@ -37,4 +37,14 @@ class EffortRepository implements EffortRepositoryInterface
 
 		return $effortsOfFollowee;
 	}
+
+	public function getEffortsOfADay($goal, $day)
+	{
+		$effortsOfADay = Effort::where('goal_id', $goal->id)
+			->where(function($goals) use ($day){
+				$goals->whereDate('created_at', $day);
+			});
+
+		return $effortsOfADay;
+	}
 }
