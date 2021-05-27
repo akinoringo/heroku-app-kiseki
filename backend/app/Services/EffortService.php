@@ -63,9 +63,17 @@ class EffortService{
 	*/
 	public function getEffortsOfFollowee() {
 
-		// フォロー中の人の軌跡を取得
-		$effortsOfFollowee = $this->EffortRepository->getEffortsOfFollowee()
-			->paginate(10, ["*"], "followingeffortspage");	
+		// ログイン中であれば、フォロー中の人の軌跡を取得
+		if (Auth::check()) {
+
+			$effortsOfFollowee = $this->EffortRepository->getEffortsOfFollowee()
+				->paginate(10, ["*"], "followingeffortspage");
+
+		}	else { // 未ログインであれば、nullを返す
+
+			$effortsOfFollowee = null;
+
+		}
 
 		return $effortsOfFollowee;
 	}	

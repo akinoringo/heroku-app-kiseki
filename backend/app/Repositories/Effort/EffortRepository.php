@@ -51,15 +51,9 @@ class EffortRepository implements EffortRepositoryInterface
 
 	public function getEffortsOfFollowee()
 	{
-		if (Auth::check()) {
 
-			$effortsOfFollowee = Effort::orderBy('created_at', 'DESC')
-				->whereIn('user_id', Auth::user()->followings()->pluck('followee_id'));		
-
-		} else {
-
-			$effortsOfFollowee = null;
-		}
+		$effortsOfFollowee = Effort::orderBy('created_at', 'DESC')
+			->whereIn('user_id', Auth::user()->followings()->pluck('followee_id'));		
 
 		return $effortsOfFollowee;
 	}
