@@ -52,7 +52,7 @@ class EffortController extends Controller
 		$search = $request->search;
 
 		// 全ての軌跡を検索語でソートして作成順に並び替えて取得
-		$efforts = $this->EffortService->getEffortsAll($search);
+		$efforts = $this->EffortService->getEffortsWithSearch($search);
 
 		// 全ての目標を作成順に並び替えて取得
 		$goals = Goal::orderBy('created_at', 'desc')
@@ -63,9 +63,10 @@ class EffortController extends Controller
 
 		// フォロー中の人の軌跡を検索語でソートして作成順に並び替えて取得
 		if (Auth::check()) {
-			$efforts_follow = $this->EffortService->getEffortsFollow($search);
+			$efforts_follow = $this->EffortService->getEffortsOfFollowee();
 			
-			return view('home', compact('goals', 'efforts', 'efforts_follow', 'ranked_users'));				
+			return view('home', compact('goals', 'efforts', 'efforts_follow', 'ranked_users'));		
+
 		} else {
 			// 誰もフォローしていない場合はnullを代入
 			$efforts_follow = null;

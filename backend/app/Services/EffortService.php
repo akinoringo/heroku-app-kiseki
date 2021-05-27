@@ -3,23 +3,28 @@
 namespace App\Services;
 
 use App\Models\Effort;
+use App\Repositories\Effort\EffortRepositoryInterface as EffortRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class EffortService{
+	protected $effort_repository;
+
+	public function __construct(EffortRepository $effort_repository){
+		$this->EffortRepository = $effort_repository;
+	}
+
 
 	/** 
 		* 全ての軌跡を検索語でソートして取得する
 		* @param Effort $effort
 		* @return  LengthAwarePaginator
 	*/
-	public function getEffortsAll($search) {
-		$efforts = Effort::orderBy('created_at', 'DESC')
-							->where('status', 0)
-							->where(function($query) use ($search) {
-								$query->orwhere('title', 'like', "%{$search}%")
-											->orwhere('content', 'like', "%{$search}%");
-							})->paginate(10, ["*"], 'effortspage');
+	public function getEffortsWithSearch($search) {
+
+		// 検索語で検索をかけた$effortsを取得
+		$efforts = $this->EffortRepository->getEffortsWithSearch($search)
+			->paginate(10, ["*"], 'effortspage');
 
 		return $efforts;
 	}
@@ -32,12 +37,11 @@ class EffortService{
 		* @return  Builder
 	*/
 	public function getEffortsOfGoal($goal){
-		$efforts = Effort::where('goal_id', $goal->id)
-			->where(function($efforts) {
-					$efforts->where('status', 0);
-				})->get();
 
-		return $efforts;
+		// リポジトリ層で$goalに紐づく軌跡を取得
+		$effortsOfGoal = $this->EffortRepository->getEffortsOfGoal($goal)->get();
+
+		return $effortsOfGoal;
 	}
 
 
@@ -46,17 +50,13 @@ class EffortService{
 		* @param Effort $effort
 		* @return  LengthAwarePaginator
 	*/
-	public function getEffortsFollow($search) {
-		$efforts_follow = Effort::query()
-			->where('status', 0)
-			->whereIn('user_id', Auth::user()->followings()->pluck('followee_id'))
-			->orderBy('created_at', 'DESC')
-			->where(function($query) use ($search) {
-									$query->orwhere('title', 'like', "%{$search}%")
-												->orwhere('content', 'like', "%{$search}%");
-			})->paginate(10, ["*"], "followingeffortspage");	
+	public function getEffortsOfFollowee() {
 
-		return $efforts_follow;
+		// フォロー中の人の軌跡を取得
+		$effortsOfFollowee = $this->EffortRepository->getEffortsOfFollowee()
+			->paginate(10, ["*"], "followingeffortspage");	
+
+		return $effortsOfFollowee;
 	}	
 
 	/** 

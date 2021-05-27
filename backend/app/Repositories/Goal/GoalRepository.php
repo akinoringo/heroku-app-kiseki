@@ -4,7 +4,7 @@ namespace App\Repositories\Goal;
 
 use App\Models\Goal;
 
-class GoalGetRepository implements GoalRepositoryInterface
+class GoalRepository implements GoalRepositoryInterface
 {
 	public function getGoalsOnProgress($user)
 	{
