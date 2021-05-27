@@ -6,6 +6,8 @@ use App\Models\Effort;
 use App\Models\Goal;
 use App\Models\User;
 use App\Http\Requests\EffortRequest;
+use App\Repositories\Effort\EffortRepositoryInterface as EffortRepository;
+use App\Repositories\Goal\GoalRepositoryInterface as GoalRepository;
 use App\Services\BadgeService;
 use App\Services\DayService;
 use App\Services\EffortService;
@@ -25,8 +27,10 @@ class EffortController extends Controller
 	protected $goal_service;
 	protected $ranking_service;
 	protected $time_service;
+	protected $effort_repository;
+	protected $goal_repository;
   
-	public function __construct(RankingService $ranking_service, BadgeService $badge_service, DayService $day_service, EffortService $effort_service, GoalService $goal_service, TimeService $time_service)
+	public function __construct(EffortRepository $effort_repository, GoalRepository $goal_repository, RankingService $ranking_service, BadgeService $badge_service, DayService $day_service, EffortService $effort_service, GoalService $goal_service, TimeService $time_service)
 	{
 		// Serviceクラスからインスタンスを作成
 		$this->BadgeService = $badge_service;
@@ -35,6 +39,10 @@ class EffortController extends Controller
 		$this->GoalService = $goal_service;
 		$this->RankingService = $ranking_service;			
 		$this->TimeService = $time_service;	
+
+		// Repositoryクラスからインスタンスを作成
+		$this->EffortRepository = $effort_repository;
+		$this->GoalRepository = $goal_repository;
 
 		// EffortPolicyでCRUD操作を制限
 		$this->authorizeResource(Effort::class, 'effort');
@@ -48,11 +56,8 @@ class EffortController extends Controller
 	*/
 	public function index(Request $request) {
 
-		// 検索語の取得
-		$search = $request->search;
-
 		// 全ての軌跡を検索語でソートして作成順に並び替えて取得
-		$efforts = $this->EffortService->getEffortsAll($search);
+		$efforts = $this->EffortService->getEffortsWithSearch($request->search);
 
 		// 全ての目標を作成順に並び替えて取得
 		$goals = Goal::orderBy('created_at', 'desc')
@@ -62,15 +67,9 @@ class EffortController extends Controller
 		$ranked_users = $this->RankingService->rankingEffortsCount();
 
 		// フォロー中の人の軌跡を検索語でソートして作成順に並び替えて取得
-		if (Auth::check()) {
-			$efforts_follow = $this->EffortService->getEffortsFollow($search);
-			
-			return view('home', compact('goals', 'efforts', 'efforts_follow', 'ranked_users'));				
-		} else {
-			// 誰もフォローしていない場合はnullを代入
-			$efforts_follow = null;
-			return view('home', compact('goals', 'efforts', 'efforts_follow', 'ranked_users'));
-		}
+		$efforts_follow = $this->EffortService->getEffortsOfFollowee();
+		
+		return view('home', compact('goals', 'efforts', 'efforts_follow', 'ranked_users'));		
 
 	}
 
@@ -121,7 +120,7 @@ class EffortController extends Controller
 	*/
 	public function store(EffortRequest $request, Effort $effort ){
 		// 軌跡に紐づく目標を取得
-		$goal = Goal::where('id', $request->goal_id)->get()->first();
+		$goal = $this->GoalRepository->getGoalOfEffort($request->goal_id)->first();
 
 		// 昨日および今日の軌跡を取得する。
 		[$efforts_yesterday, $efforts_today] = $this->EffortService->getEffortsYesterdayAndToday($goal);
@@ -132,17 +131,10 @@ class EffortController extends Controller
 		$this->DayService->updateContinuationdaysmax($goal);
 
 		//軌跡の保存処理
-		$effort->fill($request->all());
-		$effort->goal_id = $request->goal_id;
-		$effort->user_id = $request->user()->id;
-		$effort->save();
+		$this->EffortRepository->storeEffort($effort, $request);
 
-		// 奇跡に紐づく目標の継続時間合計をDBに保存。
-		$efforts = $this->EffortService->getEffortsOfGoal($goal);
-		$goal->efforts_time = $this->TimeService->sumEffortsTime($efforts);	
-
-		// $this->GoalService->updateGoalStatus($goal, $efforts);			
-		$goal->save();
+		// 目標の継続時間合計を保存。
+		$this->EffortService->storeEffortsTime($goal);	
 
 		// ログインユーザーを取得
 		$user = User::where('id', Auth::user()->id)->first();
@@ -174,12 +166,12 @@ class EffortController extends Controller
 	*/
 	public function edit(Effort $effort){
 		// 自身の未達成の目標を取得
-		$user = Auth::user();
-		$goals = $this->GoalService->getGoalsOnProgress($user);
+		$goals = $this->GoalService->getGoalsOnProgress(Auth::user());
+
+		// 軌跡が紐づいている目標を取得
+		$goal = $this->GoalRepository->getGoalOfEffort($effort->goal_id)->first();
 
 		// 未達成の目標に紐づく軌跡なら編集可能
-		$goal = Goal::where('id', $effort->goal_id)->get()->first();
-
 		if ($goal->status == 0) {
 			
 			return view('efforts.edit', compact('effort', 'goals'));	
@@ -206,10 +198,11 @@ class EffortController extends Controller
 	*/
 	public function update(EffortRequest $request, Effort $effort){
 
-		$effort->fill($request->all())->save();
+		// 軌跡にリクエスト情報を保存
+		$this->EffortRepository->updateEffort($effort, $request);
 
 		// 軌跡に紐づく目標と、目標に紐づく軌跡を全て抽出
-		$goal = Goal::where('id', $effort->goal_id)->get()->first();
+		$goal = $this->GoalRepository->getGoalOfEffort($effort->goal_id)->first();
 		$efforts = $this->EffortService->getEffortsOfGoal($goal);
 
 		// 目標に紐づく軌跡の継続時間の合計をDBに保存		
@@ -247,14 +240,13 @@ class EffortController extends Controller
 	public function destroy(Effort $effort)
 	{
 		// 軌跡に紐づく目標の取得
-		$goal = Goal::where('id', $effort->goal_id)->get()->first();
+		$goal = $this->GoalRepository->getGoalOfEffort($effort->goal_id)->first();
 
 		// 軌跡に紐づく目標が未達成の場合は、軌跡を削除可能。
 		if ($goal->status === 0) {
 
 			// $effortのステータスを削除(1)に変更する。
-			$effort->status = 1;
-			$effort->save();
+			$this->EffortRepository->destroyEffort($effort);
 
 			// 消去した$effortに紐づいていた$goalに紐づく軌跡合計時間($efforts_time)を再計算
 			$efforts = $this->EffortService->getEffortsOfGoal($goal);

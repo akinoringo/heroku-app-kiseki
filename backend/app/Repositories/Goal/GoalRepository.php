@@ -4,7 +4,7 @@ namespace App\Repositories\Goal;
 
 use App\Models\Goal;
 
-class GoalGetRepository implements GoalRepositoryInterface
+class GoalRepository implements GoalRepositoryInterface
 {
 	public function getGoalsOnProgress($user)
 	{
@@ -14,6 +14,13 @@ class GoalGetRepository implements GoalRepositoryInterface
 			})->get();
 
 		return $goalsOnProgress;
+	}
+
+	public function getGoalOfEffort($id)
+	{
+		$goal = Goal::where('id', $id);
+
+		return $goal;
 	}
 
 	public function storeGoal($request, $goal)

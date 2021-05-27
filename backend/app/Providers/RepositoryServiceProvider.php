@@ -3,8 +3,11 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\Effort\EffortRepositoryInterface;
 use App\Repositories\Goal\GoalRepositoryInterface;
-use App\Repositories\Goal\GoalGetRepository;
+use App\Repositories\Effort\EffortRepository;
+use App\Repositories\Goal\GoalRepository;
+
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -17,7 +20,8 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         //
         $this->app->bind(
-            GoalRepositoryInterface::class, GoalGetRepository::class);
+            GoalRepositoryInterface::class, GoalRepository::class);
+        $this->app->bind(EffortRepositoryInterface::class, EffortRepository::class);
     }
 
     /**

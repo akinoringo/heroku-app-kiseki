@@ -3,23 +3,39 @@
 namespace App\Services;
 
 use App\Models\Effort;
+use App\Repositories\Effort\EffortRepositoryInterface as EffortRepository;
+use App\Services\TimeService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class EffortService{
+	protected $effort_repository;
+	protected $time_service;	
+
+	public function __construct(EffortRepository $effort_repository, TimeService $time_service){
+		$this->EffortRepository = $effort_repository;
+		$this->TimeService = $time_service;
+	}
+
+	public function storeEffortsTime($goal)
+	{
+		$efforts = $this->getEffortsOfGoal($goal);
+		$goal->efforts_time = $this->TimeService->sumEffortsTime($efforts);
+
+		$goal->save();
+	}
+
 
 	/** 
 		* 全ての軌跡を検索語でソートして取得する
 		* @param Effort $effort
 		* @return  LengthAwarePaginator
 	*/
-	public function getEffortsAll($search) {
-		$efforts = Effort::orderBy('created_at', 'DESC')
-							->where('status', 0)
-							->where(function($query) use ($search) {
-								$query->orwhere('title', 'like', "%{$search}%")
-											->orwhere('content', 'like', "%{$search}%");
-							})->paginate(10, ["*"], 'effortspage');
+	public function getEffortsWithSearch($search) {
+
+		// 検索語で検索をかけた$effortsを取得
+		$efforts = $this->EffortRepository->getEffortsWithSearch($search)
+			->paginate(10, ["*"], 'effortspage');
 
 		return $efforts;
 	}
@@ -32,12 +48,11 @@ class EffortService{
 		* @return  Builder
 	*/
 	public function getEffortsOfGoal($goal){
-		$efforts = Effort::where('goal_id', $goal->id)
-			->where(function($efforts) {
-					$efforts->where('status', 0);
-				})->get();
 
-		return $efforts;
+		// リポジトリ層で$goalに紐づく軌跡を取得
+		$effortsOfGoal = $this->EffortRepository->getEffortsOfGoal($goal)->get();
+
+		return $effortsOfGoal;
 	}
 
 
@@ -46,17 +61,21 @@ class EffortService{
 		* @param Effort $effort
 		* @return  LengthAwarePaginator
 	*/
-	public function getEffortsFollow($search) {
-		$efforts_follow = Effort::query()
-			->where('status', 0)
-			->whereIn('user_id', Auth::user()->followings()->pluck('followee_id'))
-			->orderBy('created_at', 'DESC')
-			->where(function($query) use ($search) {
-									$query->orwhere('title', 'like', "%{$search}%")
-												->orwhere('content', 'like', "%{$search}%");
-			})->paginate(10, ["*"], "followingeffortspage");	
+	public function getEffortsOfFollowee() {
 
-		return $efforts_follow;
+		// ログイン中であれば、フォロー中の人の軌跡を取得
+		if (Auth::check()) {
+
+			$effortsOfFollowee = $this->EffortRepository->getEffortsOfFollowee()
+				->paginate(10, ["*"], "followingeffortspage");
+
+		}	else { // 未ログインであれば、nullを返す
+
+			$effortsOfFollowee = null;
+
+		}
+
+		return $effortsOfFollowee;
 	}	
 
 	/** 
@@ -71,17 +90,11 @@ class EffortService{
 		$yesterday = Carbon::yesterday()->format('Y-m-d');
 		$today = Carbon::today()->format('Y-m-d');
 
-		$efforts_yesterday = Effort::where('goal_id', $goal->id)
-			->where(function($goals) use ($yesterday){
-				$goals->whereDate('created_at', $yesterday);
-			})->get();
+		$effortsOfYesterday = $this->EffortRepository->getEffortsOfADay($goal, $yesterday)->get();
 
-		$efforts_today = Effort::where('goal_id', $goal->id)
-			->where(function($goals) use ($today){
-				$goals->whereDate('created_at', $today);
-			})->get();		
+		$effortsOfToday = $this->EffortRepository->getEffortsOfADay($goal, $today)->get();				
 
-		return array($efforts_yesterday, $efforts_today);
+		return array($effortsOfYesterday, $effortsOfToday);
 	}	
 
   /**
@@ -90,16 +103,17 @@ class EffortService{
   */  
   public function getEffortsCountOnWeek($goals, $daysOnWeek) {
     for ($i=0; $i < count($goals) ; $i++) {
+
       for ($j=0; $j < count($daysOnWeek) ; $j++) {
-        $effortsOnWeek[$i] = Effort::where('goal_id', $goals[$i]->id)
-          ->where(function ($query) use ($daysOnWeek, $j) {
-            $query->whereDate('created_at', $daysOnWeek[$j]);
-          });
 
-        if ($effortsOnWeek[$i]->exists()) {
-          $effortsCountOnWeek[$i][$j] = $effortsOnWeek[$i]->get()->count();
+      	// i番目の目標のj日の軌跡を取得
+        $effortsOnADay = $this->EffortRepository->getEffortsOfADay($goals[$i], $daysOnWeek[$j]);
 
-        } else {
+        // 軌跡が存在するとき
+        if ($effortsOnADay->exists()) { 
+          $effortsCountOnWeek[$i][$j] = $effortsOnADay->get()->count();
+
+        } else { // 軌跡が存在しないとき
 
           $effortsCountOnWeek[$i][$j] = 0;
 
@@ -119,17 +133,20 @@ class EffortService{
   public function getEffortsTimeTotalOnWeek($goals, $daysOnWeek) {
     for ($i=0; $i < count($goals) ; $i++) {
       for ($j=0; $j < count($daysOnWeek) ; $j++) {
-        $effortsOnWeek[$i] = Effort::where('goal_id', $goals[$i]->id)
-          ->where(function ($query) use ($daysOnWeek, $j) {
-            $query->whereDate('created_at', $daysOnWeek[$j]);
-          });
 
-        if ($effortsOnWeek[$i]->exists()) {
-          $effortsTimeOnWeek[$i][$j] = $effortsOnWeek[$i]->pluck('effort_time')->all();
-          $effortsTimeTotalOnWeek[$i][$j] = array_sum($effortsTimeOnWeek[$i][$j]);                  
+      	// i番目の目標のj日の軌跡を取得
+        $effortsOnADay = $this->EffortRepository->getEffortsOfADay($goals[$i], $daysOnWeek[$j]);      	
+
+        if ($effortsOnADay->exists()) { // 軌跡が存在するとき
+
+        	// 軌跡の積み上げ時間を積算し、i番目の目標のj日目のものとして保存
+          $effortsTimeTotalOnWeek[$i][$j] = array_sum($effortsOnADay->pluck('effort_time')->all());
+                
         }
-        else {
+        else { // 軌跡が存在しないとき
+
           $effortsTimeTotalOnWeek[$i][$j] = 0;
+
         }
       }       
     }    
