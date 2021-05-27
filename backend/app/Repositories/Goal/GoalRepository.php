@@ -16,6 +16,13 @@ class GoalRepository implements GoalRepositoryInterface
 		return $goalsOnProgress;
 	}
 
+	public function getGoalOfEffort($id)
+	{
+		$goal = Goal::where('id', $id);
+
+		return $goal;
+	}
+
 	public function storeGoal($request, $goal)
 	{
 		$goal->fill($request->all());

@@ -4,14 +4,25 @@ namespace App\Services;
 
 use App\Models\Effort;
 use App\Repositories\Effort\EffortRepositoryInterface as EffortRepository;
+use App\Services\TimeService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class EffortService{
 	protected $effort_repository;
+	protected $time_service;	
 
-	public function __construct(EffortRepository $effort_repository){
+	public function __construct(EffortRepository $effort_repository, TimeService $time_service){
 		$this->EffortRepository = $effort_repository;
+		$this->TimeService = $time_service;
+	}
+
+	public function storeEffortsTime($goal)
+	{
+		$efforts = $this->getEffortsOfGoal($goal);
+		$goal->efforts_time = $this->TimeService->sumEffortsTime($efforts);
+
+		$goal->save();
 	}
 
 
@@ -125,7 +136,7 @@ class EffortService{
                 
         }
         else { // 軌跡が存在しないとき
-        	
+
           $effortsTimeTotalOnWeek[$i][$j] = 0;
 
         }
