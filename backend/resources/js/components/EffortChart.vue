@@ -1,11 +1,18 @@
 <template>
 	<div>
-		<label>
-			<input type="radio" v-model="chartType" value="1">積み上げた回数
-		</label>
-		<label class="ml-2">
-			<input type="radio" v-model="chartType" value="2">積み上げた時間
-		</label>		
+    <div class="text-center mb-2">
+      <input type="text" name="startdate" placeholder="20210924">
+      <input type="text" name="enddate" placeholder="20210924">
+      <button type="submit" class="btn btn-sm btn-info text-white">グラフ表示</button>
+    </div>		
+    <div class="text-center">
+			<label>
+				<input type="radio" v-model="chartType" value="1">積み上げた回数
+			</label>
+			<label class="ml-2">
+				<input type="radio" v-model="chartType" value="2">積み上げた時間
+			</label>	    	
+    </div>			
 		<bar-chart 
 			:chartData="countData" ylabel="積み上げ回数 (回)" ref="countChart" v-show="chartType === '1' ">
 		</bar-chart>		
@@ -22,7 +29,7 @@ export default {
 		BarChart
 	},
 	props: {
-    userid: ''
+    userid: '',
 	},
 	data() {
 		return {

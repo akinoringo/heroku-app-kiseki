@@ -2044,6 +2044,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -77620,46 +77627,50 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("label", [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.chartType,
-              expression: "chartType"
-            }
-          ],
-          attrs: { type: "radio", value: "1" },
-          domProps: { checked: _vm._q(_vm.chartType, "1") },
-          on: {
-            change: function($event) {
-              _vm.chartType = "1"
-            }
-          }
-        }),
-        _vm._v("積み上げた回数\n\t")
-      ]),
+      _vm._m(0),
       _vm._v(" "),
-      _c("label", { staticClass: "ml-2" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.chartType,
-              expression: "chartType"
+      _c("div", { staticClass: "text-center" }, [
+        _c("label", [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.chartType,
+                expression: "chartType"
+              }
+            ],
+            attrs: { type: "radio", value: "1" },
+            domProps: { checked: _vm._q(_vm.chartType, "1") },
+            on: {
+              change: function($event) {
+                _vm.chartType = "1"
+              }
             }
-          ],
-          attrs: { type: "radio", value: "2" },
-          domProps: { checked: _vm._q(_vm.chartType, "2") },
-          on: {
-            change: function($event) {
-              _vm.chartType = "2"
+          }),
+          _vm._v("積み上げた回数\n\t\t\t")
+        ]),
+        _vm._v(" "),
+        _c("label", { staticClass: "ml-2" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.chartType,
+                expression: "chartType"
+              }
+            ],
+            attrs: { type: "radio", value: "2" },
+            domProps: { checked: _vm._q(_vm.chartType, "2") },
+            on: {
+              change: function($event) {
+                _vm.chartType = "2"
+              }
             }
-          }
-        }),
-        _vm._v("積み上げた時間\n\t")
+          }),
+          _vm._v("積み上げた時間\n\t\t\t")
+        ])
       ]),
       _vm._v(" "),
       _c("bar-chart", {
@@ -77691,7 +77702,31 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "text-center mb-2" }, [
+      _c("input", {
+        attrs: { type: "text", name: "startdate", placeholder: "20210924" }
+      }),
+      _vm._v(" "),
+      _c("input", {
+        attrs: { type: "text", name: "enddate", placeholder: "20210924" }
+      }),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-sm btn-info text-white",
+          attrs: { type: "submit" }
+        },
+        [_vm._v("グラフ表示")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 
