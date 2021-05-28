@@ -151,17 +151,25 @@ class EffortController extends Controller
 		// 目標達成期限を過ぎていた場合はアラートを出す。
 		$this->DayService->checkGoalDeadline($goal);
 
-		$tag_first = $effort->goal->tags->first();
+		$tag_first = $effort->goal->tags->first() ?? null;
 
-		foreach ($effort->goal->tags as $tag) {
-			if ($tag === $tag_first) {
-				$hashtags = $tag_first->name;
+		if ($tag_first !== null) {
+			foreach ($effort->goal->tags as $tag) {
 
-			} else {
+				if ($tag === $tag_first) {
+					$hashtags = $tag_first->name;
 
-				$hashtags .= "," . $tag->name;
-			}
-			
+				}
+				if ($tag !== $tag_first) {
+
+					$hashtags .= "," . $tag->name;
+				}			
+			}			
+
+		} else {
+
+			$hashtags = "軌跡";
+
 		}
 		
 		return redirect()
