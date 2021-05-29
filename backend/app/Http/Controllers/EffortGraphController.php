@@ -23,7 +23,17 @@ class EffortGraphController extends Controller
 
   // マイページのグラフ表示に必要なパラメータを取得
   // 戻り値：目標タイトル, 直近1週間の日付, 軌跡の積み上げ数, 軌跡の積み上げ時間
-  public function index($id){
+  public function index($id, Request $request){
+
+    $startdate = $request->startdate;
+    $enddate = $request->enddate;
+
+    if ($startdate && $enddate) {
+      $daysForGraph = $this->DayService->getDaysForGraph($startdate, $enddate);
+    } else {
+      $daysForGraph = 1;
+    }
+
     
     // viewから受け渡された$idに対応するユーザーの取得
     $user = User::find($id);
@@ -54,6 +64,9 @@ class EffortGraphController extends Controller
       'daysOnWeekFormated' => $daysOnWeekFormated,
       'effortsCountOnWeek' => $effortsCountOnWeek,
       'effortsTimeTotalOnWeek' => $effortsTimeTotalOnWeek,
+      'startdate' => $startdate,
+      'enddate' => $enddate,
+      'daysForGraph' => $daysForGraph,
     ];     
 
   }

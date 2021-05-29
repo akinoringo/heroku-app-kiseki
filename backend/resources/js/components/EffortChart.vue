@@ -1,9 +1,9 @@
 <template>
 	<div>
     <div class="text-center mb-2">
-      <input type="text" name="startdate" placeholder="20210924">
-      <input type="text" name="enddate" placeholder="20210924">
-      <button type="submit" class="btn btn-sm btn-info text-white">グラフ表示</button>
+      <input type="date" v-model="startdate" placeholder="20210924">
+      <input type="date" v-model="enddate" placeholder="20210924">
+      <button type="submit" @click="rerender" class="btn btn-sm btn-info text-white">グラフ表示</button>
     </div>		
     <div class="text-center">
 			<label>
@@ -33,6 +33,8 @@ export default {
 	},
 	data() {
 		return {
+			startdate: "",
+			enddate: "",
 			apiEffortData: {},
 			countData: {},
 			timeData: {},
@@ -64,10 +66,13 @@ export default {
 			this.$nextTick(() => {
 				this.$refs.countChart.renderBarChart();
 				this.$refs.timeChart.renderBarChart();
+			console.log("グラフ表示しました");
 			});
 		},
 		setDatasets() {
 			this.goalsTitle = this.apiEffortData.goalsTitle;
+			this.timedatasets = [];
+			this.countdatasets = [];
 			for (let i = 0; i<this.apiEffortData.goalsTitle.length; i++){
 				this.timedatasets.push({
 					label: this.goalsTitle[i],
@@ -82,6 +87,26 @@ export default {
 					data: this.apiEffortData.effortsCountOnWeek[i]
 				});
 			}			
+		},
+		rerender() {
+			this.$refs.countChart.$data._chart.destroy();
+			this.$refs.timeChart.$data._chart.destroy();		
+			this.$http
+				.get(`/${this.id}/effortgraph`, {
+					params: 
+						{
+							startdate: this.startdate, 
+							enddate: this.enddate,
+						}
+				})
+				.then(responce => {
+					this.apiEffortData = responce.data;
+					console.log(responce.data.startdate);
+					console.log(responce.data.enddate);
+					console.log(responce.data.daysForGraph);
+					this.setDatasets();
+					this.setChart();			
+				});
 		},
 	}
 };

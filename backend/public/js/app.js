@@ -2061,6 +2061,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      startdate: "",
+      enddate: "",
       apiEffortData: {},
       countData: {},
       timeData: {},
@@ -2099,10 +2101,14 @@ __webpack_require__.r(__webpack_exports__);
         _this2.$refs.countChart.renderBarChart();
 
         _this2.$refs.timeChart.renderBarChart();
+
+        console.log("グラフ表示しました");
       });
     },
     setDatasets: function setDatasets() {
       this.goalsTitle = this.apiEffortData.goalsTitle;
+      this.timedatasets = [];
+      this.countdatasets = [];
 
       for (var i = 0; i < this.apiEffortData.goalsTitle.length; i++) {
         this.timedatasets.push({
@@ -2119,6 +2125,29 @@ __webpack_require__.r(__webpack_exports__);
           data: this.apiEffortData.effortsCountOnWeek[_i]
         });
       }
+    },
+    rerender: function rerender() {
+      var _this3 = this;
+
+      this.$refs.countChart.$data._chart.destroy();
+
+      this.$refs.timeChart.$data._chart.destroy();
+
+      this.$http.get("/".concat(this.id, "/effortgraph"), {
+        params: {
+          startdate: this.startdate,
+          enddate: this.enddate
+        }
+      }).then(function (responce) {
+        _this3.apiEffortData = responce.data;
+        console.log(responce.data.startdate);
+        console.log(responce.data.enddate);
+        console.log(responce.data.daysForGraph);
+
+        _this3.setDatasets();
+
+        _this3.setChart();
+      });
     }
   }
 });
@@ -77627,7 +77656,59 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm._m(0),
+      _c("div", { staticClass: "text-center mb-2" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.startdate,
+              expression: "startdate"
+            }
+          ],
+          attrs: { type: "date", placeholder: "20210924" },
+          domProps: { value: _vm.startdate },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.startdate = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.enddate,
+              expression: "enddate"
+            }
+          ],
+          attrs: { type: "date", placeholder: "20210924" },
+          domProps: { value: _vm.enddate },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.enddate = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-sm btn-info text-white",
+            attrs: { type: "submit" },
+            on: { click: _vm.rerender }
+          },
+          [_vm._v("グラフ表示")]
+        )
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "text-center" }, [
         _c("label", [
@@ -77702,31 +77783,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "text-center mb-2" }, [
-      _c("input", {
-        attrs: { type: "text", name: "startdate", placeholder: "20210924" }
-      }),
-      _vm._v(" "),
-      _c("input", {
-        attrs: { type: "text", name: "enddate", placeholder: "20210924" }
-      }),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-sm btn-info text-white",
-          attrs: { type: "submit" }
-        },
-        [_vm._v("グラフ表示")]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

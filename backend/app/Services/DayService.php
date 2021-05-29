@@ -87,5 +87,21 @@ class DayService{
 
   }  	
 
+  /**
+    * 与えられた日付範囲を取得する
+    * @return Array
+  */
+  public function getDaysForGraph($startdate, $enddate) {
+
+    $startdateOnCarbon = new Carbon($startdate);
+    $enddateOnCarbon = new Carbon($enddate);
+
+    $diffInDays = $startdateOnCarbon->diffInDays($enddateOnCarbon);
+
+    return $diffInDays;
+
+  }  
+
+
 
 }
