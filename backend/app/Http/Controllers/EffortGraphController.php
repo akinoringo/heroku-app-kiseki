@@ -25,16 +25,6 @@ class EffortGraphController extends Controller
   // 戻り値：目標タイトル, 直近1週間の日付, 軌跡の積み上げ数, 軌跡の積み上げ時間
   public function index($id, Request $request){
 
-    $startdate = $request->startdate;
-    $enddate = $request->enddate;
-
-    if ($startdate && $enddate) {
-      $daysForGraph = $this->DayService->getDaysForGraph($startdate, $enddate);
-    } else {
-      $daysForGraph = 1;
-    }
-
-    
     // viewから受け渡された$idに対応するユーザーの取得
     $user = User::find($id);
 
@@ -59,14 +49,30 @@ class EffortGraphController extends Controller
     // 1週間の日別積み上げ時間を配列で取得
     $effortsTimeTotalOnWeek = $this->EffortService->getEffortsTimeTotalOnWeek($goals, $daysOnWeek);
 
+    $startdate = $request->startdate;
+    $enddate = $request->enddate;
+
+    // 日付の範囲を指定した場合
+    if ($startdate && $enddate) {
+      $daysForGraph = $this->DayService->getDaysForGraph($startdate, $enddate);
+      $daysForGraphFormated = $this->DayService->getDaysForGraphFormated($startdate, $enddate);
+      $parametersCountForGraph = $this->EffortService->getEffortsCountOnWeek($goals, $daysForGraph); 
+      $parametersTimeForGraph = $this->EffortService->getEffortsTimeTotalOnWeek($goals, $daysForGraph);
+
+
+    } else { // 日付の範囲を指定していない場合は、今週1週間の軌跡を取得
+
+      $daysForGraphFormated = $daysOnWeekFormated;
+      $parametersCountForGraph = $effortsCountOnWeek;
+      $parametersTimeForGraph = $effortsTimeTotalOnWeek;
+    }    
+
     return [
-      'goalsTitle' => $goalsTitle,
-      'daysOnWeekFormated' => $daysOnWeekFormated,
-      'effortsCountOnWeek' => $effortsCountOnWeek,
-      'effortsTimeTotalOnWeek' => $effortsTimeTotalOnWeek,
-      'startdate' => $startdate,
-      'enddate' => $enddate,
-      'daysForGraph' => $daysForGraph,
+      'goalsTitle' => $goalsTitle, // 必須
+      'daysOnWeekFormated' => $daysForGraphFormated, // 必須
+      'effortsCountOnWeek' => $parametersCountForGraph, // 必須
+      'effortsTimeTotalOnWeek' => $parametersTimeForGraph, // 必須
+      'daysForGraph' => $daysForGraphFormated, // 必須
     ];     
 
   }

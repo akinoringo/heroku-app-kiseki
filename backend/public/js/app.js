@@ -2140,8 +2140,6 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (responce) {
         _this3.apiEffortData = responce.data;
-        console.log(responce.data.startdate);
-        console.log(responce.data.enddate);
         console.log(responce.data.daysForGraph);
 
         _this3.setDatasets();

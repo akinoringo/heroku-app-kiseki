@@ -101,8 +101,6 @@ export default {
 				})
 				.then(responce => {
 					this.apiEffortData = responce.data;
-					console.log(responce.data.startdate);
-					console.log(responce.data.enddate);
 					console.log(responce.data.daysForGraph);
 					this.setDatasets();
 					this.setChart();			

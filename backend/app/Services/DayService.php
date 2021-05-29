@@ -98,9 +98,42 @@ class DayService{
 
     $diffInDays = $startdateOnCarbon->diffInDays($enddateOnCarbon);
 
-    return $diffInDays;
+    $start = $startdateOnCarbon;
 
-  }  
+    $daysForGraph[0] = $start;
+
+    //Carbonのインスタンスが上書きされないようにcopy()して日付を加算
+    for ($i=1; $i <= $diffInDays ; $i++) {
+      $daysForGraph[$i] = $start->copy()->addDay($i);
+    }    
+
+    return $daysForGraph;
+
+  }
+
+  /**
+    * 与えられた日付範囲を取得する
+    * @return Array
+  */
+  public function getDaysForGraphFormated($startdate, $enddate) {
+
+    $startdateOnCarbon = new Carbon($startdate);
+    $enddateOnCarbon = new Carbon($enddate);
+
+    $diffInDays = $startdateOnCarbon->diffInDays($enddateOnCarbon);
+
+    $start = $startdateOnCarbon;
+
+    $daysForGraph[0] = $start->format('n/d');
+
+    //Carbonのインスタンスが上書きされないようにcopy()して日付を加算
+    for ($i=1; $i <= $diffInDays ; $i++) {
+      $daysForGraph[$i] = $start->copy()->addDay($i)->format('n/d');
+    }    
+
+    return $daysForGraph;
+
+  }     
 
 
 
