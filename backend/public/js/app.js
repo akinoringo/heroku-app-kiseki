@@ -2044,6 +2044,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2054,6 +2062,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      startdate: "",
+      enddate: "",
       apiEffortData: {},
       countData: {},
       timeData: {},
@@ -2092,10 +2102,14 @@ __webpack_require__.r(__webpack_exports__);
         _this2.$refs.countChart.renderBarChart();
 
         _this2.$refs.timeChart.renderBarChart();
+
+        console.log("グラフ表示しました");
       });
     },
     setDatasets: function setDatasets() {
       this.goalsTitle = this.apiEffortData.goalsTitle;
+      this.timedatasets = [];
+      this.countdatasets = [];
 
       for (var i = 0; i < this.apiEffortData.goalsTitle.length; i++) {
         this.timedatasets.push({
@@ -2112,6 +2126,27 @@ __webpack_require__.r(__webpack_exports__);
           data: this.apiEffortData.effortsCountOnWeek[_i]
         });
       }
+    },
+    rerender: function rerender() {
+      var _this3 = this;
+
+      this.$refs.countChart.$data._chart.destroy();
+
+      this.$refs.timeChart.$data._chart.destroy();
+
+      this.$http.get("/".concat(this.id, "/effortgraph"), {
+        params: {
+          startdate: this.startdate,
+          enddate: this.enddate
+        }
+      }).then(function (responce) {
+        _this3.apiEffortData = responce.data;
+        console.log(responce.data.daysForGraph);
+
+        _this3.setDatasets();
+
+        _this3.setChart();
+      });
     }
   }
 });
@@ -77620,46 +77655,102 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("label", [
+      _c("div", { staticClass: "text-center mb-2" }, [
         _c("input", {
           directives: [
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.chartType,
-              expression: "chartType"
+              value: _vm.startdate,
+              expression: "startdate"
             }
           ],
-          attrs: { type: "radio", value: "1" },
-          domProps: { checked: _vm._q(_vm.chartType, "1") },
+          attrs: { type: "date", placeholder: "20210924" },
+          domProps: { value: _vm.startdate },
           on: {
-            change: function($event) {
-              _vm.chartType = "1"
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.startdate = $event.target.value
             }
           }
         }),
-        _vm._v("積み上げた回数\n\t")
+        _vm._v("\n      ~\n      "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.enddate,
+              expression: "enddate"
+            }
+          ],
+          attrs: { type: "date", placeholder: "20210924" },
+          domProps: { value: _vm.enddate },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.enddate = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-sm btn-info text-white",
+            attrs: { type: "submit" },
+            on: { click: _vm.rerender }
+          },
+          [_vm._v("表示")]
+        )
       ]),
       _vm._v(" "),
-      _c("label", { staticClass: "ml-2" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.chartType,
-              expression: "chartType"
+      _c("div", { staticClass: "text-center" }, [
+        _c("label", [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.chartType,
+                expression: "chartType"
+              }
+            ],
+            attrs: { type: "radio", value: "1" },
+            domProps: { checked: _vm._q(_vm.chartType, "1") },
+            on: {
+              change: function($event) {
+                _vm.chartType = "1"
+              }
             }
-          ],
-          attrs: { type: "radio", value: "2" },
-          domProps: { checked: _vm._q(_vm.chartType, "2") },
-          on: {
-            change: function($event) {
-              _vm.chartType = "2"
+          }),
+          _vm._v("積み上げた回数\n\t\t\t")
+        ]),
+        _vm._v(" "),
+        _c("label", { staticClass: "ml-2" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.chartType,
+                expression: "chartType"
+              }
+            ],
+            attrs: { type: "radio", value: "2" },
+            domProps: { checked: _vm._q(_vm.chartType, "2") },
+            on: {
+              change: function($event) {
+                _vm.chartType = "2"
+              }
             }
-          }
-        }),
-        _vm._v("積み上げた時間\n\t")
+          }),
+          _vm._v("積み上げた時間\n\t\t\t")
+        ])
       ]),
       _vm._v(" "),
       _c("bar-chart", {

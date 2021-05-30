@@ -61,10 +61,34 @@ class EffortRepository implements EffortRepositoryInterface
 	public function getEffortsOfADay($goal, $day)
 	{
 		$effortsOfADay = Effort::where('goal_id', $goal->id)
-			->where(function($goals) use ($day){
-				$goals->whereDate('created_at', $day);
+			->where(function($query) use ($day){
+				$query->whereDate('created_at', $day);
 			});
 
 		return $effortsOfADay;
 	}
+
+	public function getEffortsOfAMonth($goal, $month)
+	{
+		$effortsOfAMonth = Effort::where('goal_id', $goal->id)
+			->where(function($query) use ($month){
+				$query
+					->whereDate('created_at', '>=', $month->firstOfMonth()->format('Y-m-d'))
+					->whereDate('created_at', '<=', $month->lastOfMonth()->format('Y-m-d'));
+			});		
+
+		return $effortsOfAMonth;
+	}	
+
+	public function getEffortsOfAWeek($goal, $week)
+	{
+		$effortsOfAWeek = Effort::where('goal_id', $goal->id)
+			->where(function($query) use ($week){
+				$query
+					->whereDate('created_at', '>=', $week->startOfWeek()->format('Y-m-d'))
+					->whereDate('created_at', '<=', $week->endOfWeek()->format('Y-m-d'));
+			});		
+
+		return $effortsOfAWeek;
+	}		
 }

@@ -1,7 +1,10 @@
 @auth
 <nav class="navbar navbar-expand navbar-dark" style="background-color: #008000">
 
-  <a class="navbar-brand font-weight-bold" href="/"><i class="fas fa-shoe-prints fa-rotate-270 mr-2"></i>Kiseki</a>
+  <a class="navbar-brand" href="/">
+    <i class="fas fa-shoe-prints fa-rotate-270 mr-2"></i>
+    <span style="font-family: 'Pattaya', sans-serif; letter-spacing: 3px; font-size: 26px;">Kiseki</span>
+  </a>
 
   <ul class="navbar-nav ml-auto">
 
@@ -42,10 +45,13 @@
 
 @guest
 <!--Navbar-->
-<nav class="navbar navbar-dark lighten-4 mb-4" style="background-color: #008000">
+<nav class="navbar navbar-dark lighten-4 mb-0" style="background-color: #008000">
 
   <!-- Navbar brand -->
-  <a class="navbar-brand font-weight-bold" href="/"><i class="fas fa-shoe-prints fa-rotate-270 mr-2"></i> Kiseki</a>
+  <a class="navbar-brand font-weight-bold" href="/">
+    <i class="fas fa-shoe-prints fa-rotate-270 mr-2"></i>
+    <span style="font-family: 'Pattaya', sans-serif; letter-spacing: 3px; font-size: 26px;">Kiseki</span>
+  </a>
   
   <!-- Collapse button -->
   <button class="navbar-toggler toggler-example navbar-dark darken-3" type="button" data-toggle="collapse"

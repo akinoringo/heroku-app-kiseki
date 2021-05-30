@@ -1,11 +1,19 @@
 <template>
 	<div>
-		<label>
-			<input type="radio" v-model="chartType" value="1">積み上げた回数
-		</label>
-		<label class="ml-2">
-			<input type="radio" v-model="chartType" value="2">積み上げた時間
-		</label>		
+    <div class="text-center mb-2">
+      <input type="date" v-model="startdate" placeholder="20210924">
+      ~
+      <input type="date" v-model="enddate" placeholder="20210924">
+      <button type="submit" @click="rerender" class="btn btn-sm btn-info text-white">表示</button>
+    </div>		
+    <div class="text-center">
+			<label>
+				<input type="radio" v-model="chartType" value="1">積み上げた回数
+			</label>
+			<label class="ml-2">
+				<input type="radio" v-model="chartType" value="2">積み上げた時間
+			</label>	    	
+    </div>			
 		<bar-chart 
 			:chartData="countData" ylabel="積み上げ回数 (回)" ref="countChart" v-show="chartType === '1' ">
 		</bar-chart>		
@@ -22,10 +30,12 @@ export default {
 		BarChart
 	},
 	props: {
-    userid: ''
+    userid: '',
 	},
 	data() {
 		return {
+			startdate: "",
+			enddate: "",
 			apiEffortData: {},
 			countData: {},
 			timeData: {},
@@ -57,10 +67,13 @@ export default {
 			this.$nextTick(() => {
 				this.$refs.countChart.renderBarChart();
 				this.$refs.timeChart.renderBarChart();
+			console.log("グラフ表示しました");
 			});
 		},
 		setDatasets() {
 			this.goalsTitle = this.apiEffortData.goalsTitle;
+			this.timedatasets = [];
+			this.countdatasets = [];
 			for (let i = 0; i<this.apiEffortData.goalsTitle.length; i++){
 				this.timedatasets.push({
 					label: this.goalsTitle[i],
@@ -75,6 +88,24 @@ export default {
 					data: this.apiEffortData.effortsCountOnWeek[i]
 				});
 			}			
+		},
+		rerender() {
+			this.$refs.countChart.$data._chart.destroy();
+			this.$refs.timeChart.$data._chart.destroy();		
+			this.$http
+				.get(`/${this.id}/effortgraph`, {
+					params: 
+						{
+							startdate: this.startdate, 
+							enddate: this.enddate,
+						}
+				})
+				.then(responce => {
+					this.apiEffortData = responce.data;
+					console.log(responce.data.daysForGraph);
+					this.setDatasets();
+					this.setChart();			
+				});
 		},
 	}
 };

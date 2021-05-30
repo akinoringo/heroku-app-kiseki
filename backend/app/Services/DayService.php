@@ -87,5 +87,169 @@ class DayService{
 
   }  	
 
+  /**
+    * 与えられた日付範囲を取得する
+    * @return Array
+  */
+  public function getDaysForGraph($startdate, $enddate) {
+
+    $startdateOnCarbon = new Carbon($startdate);
+    $enddateOnCarbon = new Carbon($enddate);
+
+    $diffInDays = $startdateOnCarbon->diffInDays($enddateOnCarbon);
+
+    $start = $startdateOnCarbon;
+
+    $daysForGraph[0] = $start;
+
+    //Carbonのインスタンスが上書きされないようにcopy()して日付を加算
+    for ($i=1; $i <= $diffInDays ; $i++) {
+      $daysForGraph[$i] = $start->copy()->addDay($i);
+    }    
+
+    return $daysForGraph;
+
+  }
+
+  /**
+    * 与えられた日付範囲を取得する
+    * @return Array
+  */
+  public function getDaysForGraphFormated($startdate, $enddate) {
+
+    $startdateOnCarbon = new Carbon($startdate);
+    $enddateOnCarbon = new Carbon($enddate);
+
+    $diffInDays = $startdateOnCarbon->diffInDays($enddateOnCarbon);
+
+    $start = $startdateOnCarbon;
+
+    $daysForGraph[0] = $start->format('n/d');
+
+    //Carbonのインスタンスが上書きされないようにcopy()して日付を加算
+    for ($i=1; $i <= $diffInDays ; $i++) {
+      $daysForGraph[$i] = $start->copy()->addDay($i)->format('n/d');
+    }    
+
+    return $daysForGraph;
+
+  }   
+
+  /**
+    * 与えられた開始日と終了日の間の月を配列で返す
+    * @return Array
+  */
+  public function getMonthsForGraph($startdate, $enddate) {
+
+    date_default_timezone_set('Asia/Tokyo');
+
+    $startdateOnCarbon = new Carbon($startdate);
+    $enddateOnCarbon = new Carbon($enddate);   
+
+    $diffInMonths = $startdateOnCarbon->diffInMonths($enddateOnCarbon);
+    
+    // // 開始日と終了日の月の差を算出
+    // $monthOfstartdate = $startdateOnCarbon->month;
+    // $monthOfenddate = $enddateOnCarbon->month;
+
+    // if ($monthOfstartdate < $monthOfenddate) {
+
+    //   $diffInMonths = $monthOfenddate - $monthOfstartdate;      
+
+    // } else {
+
+    //   $diffInMonths = (12 - $monthOfstartdate) + $monthOfenddate;
+    // }
+
+    // 月を配列で取得
+    $months[0] = $startdateOnCarbon;
+
+    for ($i=1; $i <= $diffInMonths ; $i++) {
+      $months[$i] = $startdateOnCarbon->copy()->addMonthNoOverflow($i);
+    }     
+
+    return $months;
+
+  }
+
+
+  /**
+    * 与えられた開始日と終了日の間の月を配列で返す(Formated)
+    * @return Array
+  */
+  public function getMonthsForGraphFormated($months) {
+
+    $i = 0;
+
+    foreach ($months as $month) {
+      $monthsFormated[$i] = $month->format('Y/n');
+      $i++;
+    }
+
+    return $monthsFormated;
+
+  }
+
+  public function getDiffInDays($startdate, $enddate) {
+
+    $startdateOnCarbon = new Carbon($startdate);
+    $enddateOnCarbon = new Carbon($enddate);
+
+    $diffInDays = $startdateOnCarbon->diffInDays($enddateOnCarbon);
+
+    return $diffInDays;    
+
+  }
+
+  // 
+  public function getWeeksForGraph($startdate, $enddate) {
+
+    // Carbonインスタンスを作成
+    $startdateOnCarbon = new Carbon($startdate);
+    $enddateOnCarbon = new Carbon($enddate); 
+
+    // 年の中で何週目かを取得
+    $weekOfYearOfStartDate = $startdateOnCarbon->weekOfYear; // 4
+    $weekOfYearOfEndDate = $enddateOnCarbon->weekOfYear; // 10
+
+    // // 週の差分を取得
+    // if ($weekOfYearOfStartDate < $weekOfYearOfEndDate) {
+
+    //   $diffInWeeks = $weekOfYearOfEndDate - $weekOfYearOfStartDate; // 6 
+
+    // } else { // 5, 51
+
+    //   $diffInWeeks = (52 - $weekOfYearOfStartDate) + $weekOfYearOfEndDate;
+
+    // }
+
+    $diffInWeeks = $startdateOnCarbon->diffInWeeks($enddateOnCarbon);
+
+    $weeks[0] = $startdateOnCarbon->startOfWeek();
+
+    for ($i=1; $i <= $diffInWeeks ; $i++) {
+      $weeks[$i] = $startdateOnCarbon->copy()->addWeeks($i)->startOfWeek();
+    }     
+
+    return $weeks;
+
+  }
+
+  // 
+  public function getWeeksForGraphFormated($weeks) {
+
+
+    $i = 0;
+
+    foreach ($weeks as $week) {
+      $weeksFormated[$i] = $week->format('n月') . $week->weekNumberInMonth . "週";
+      $i++;
+    }
+
+    return $weeksFormated;
+
+  }  
+
+
 
 }

@@ -3,6 +3,7 @@
   <social-sharing id="social" url="http://app-kiseki.com"
                       title="『Kiseki』 ~目標達成に向けて日々の軌跡を綴ろう~"
                       description="『Kiseki』は、目標達成をサポートするためのアプリです。"
+                      quote="『Kiseki』は、目標達成をサポートするためのアプリです。"
                       hashtags="目標,軌跡"
                       inline-template>
 

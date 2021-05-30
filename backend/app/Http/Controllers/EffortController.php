@@ -151,11 +151,38 @@ class EffortController extends Controller
 		// 目標達成期限を過ぎていた場合はアラートを出す。
 		$this->DayService->checkGoalDeadline($goal);
 
+		$tag_first = $effort->goal->tags->first() ?? null;
+
+		if ($tag_first !== null) {
+			foreach ($effort->goal->tags as $tag) {
+
+				if ($tag === $tag_first) {
+					$hashtags = $tag_first->name;
+
+				}
+				if ($tag !== $tag_first) {
+
+					$hashtags .= "," . $tag->name;
+				}			
+			}			
+
+		} else {
+
+			$hashtags = "軌跡";
+
+		}
+		
 		return redirect()
-						->route('mypage.show', ['id' => Auth::user()->id])
+						->route('mypage.show', [
+							'id' => Auth::user()->id,
+						])
 						->with([
 							'flash_message' => '軌跡を作成しました。',
-							'color' => 'success'
+							'color' => 'success',
+							'sns_message' => '軌跡をシェアしましょう',
+							'share_content' => '軌跡を登録しました',
+							'share_message' => $effort->title,					
+							'share_hashtags' => $hashtags,					
 						]);		
 	}
 

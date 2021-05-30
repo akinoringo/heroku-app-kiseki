@@ -78,7 +78,7 @@ class GoalController extends Controller
 		return redirect()
 						->route('mypage.show', ['id' => Auth::user()->id])
 						->with([
-							'flash_message' => '目標を登録しました。',
+							'flash_message' => '目標を登録しました。軌跡を5つ以上登録すると、目標を達成済に変更することができます。',
 							'color' => 'success',
 						]);
 	}
