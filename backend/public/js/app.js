@@ -2051,6 +2051,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -77675,7 +77676,7 @@ var render = function() {
             }
           }
         }),
-        _vm._v(" "),
+        _vm._v("\n      ~\n      "),
         _c("input", {
           directives: [
             {
@@ -77704,7 +77705,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: { click: _vm.rerender }
           },
-          [_vm._v("グラフ表示")]
+          [_vm._v("表示")]
         )
       ]),
       _vm._v(" "),

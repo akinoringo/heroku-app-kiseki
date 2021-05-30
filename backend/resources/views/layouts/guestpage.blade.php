@@ -1,12 +1,24 @@
+{{-- <div class="img-wrapper" style="position: relative;">
+  <img src="/images/app-image4.png" style="object-fit: cover; width: 100%;">
+  <h3 class="text-center" style="position: absolute; top: 30px; left: 0; right: 0; margin: auto; font-size: 8em; color: #ff6347;">
+    <span style="font-family: 'Pattaya', sans-serif; letter-spacing: 10px;">Kiseki</span>
+  </h3>
+  <h3 class="text-center" style="position: absolute; top: 180px; left: 0; right: 0; margin: auto; font-size: 4em; color: #ff6347;">
+    <span style="font-family: 'Pattaya', sans-serif; letter-spacing: 3px;">For your achievement</span>
+  </h3>  
+</div> --}}
 <div class="container mt-2 text-center border-bottom mb-2">
     <div class="jumbotron py-5">
-      <h1 class="display-4">Kisekiとは？</h1>
+      <h1 class="display-4">
+        <span style="font-family: 'Pattaya', sans-serif; letter-spacing: 3px;">Kiseki</span>
+        <span>とは？</span>
+      </h1>
       <p class="lead">
         目標達成のための日々の頑張り(軌跡)を記録するアプリです。
     　</p>
       <div class="container text-center mb-4">
         <img src="images/stepup.svg" style=" width: 60%;">
-      </div> 
+      </div>
       <p>
         まずはユーザー登録して目標を登録してみよう！
       </p>
@@ -15,7 +27,9 @@
         <a href="{{ route('login') }}" class="card-text text-muted">ログインはこちら</a>
       </div>      
     </div>
-    <h3 class="text-center my-4 pb-2 border-bottom">Kisekiの特徴</h3>
+    <h3 class="text-center my-4 pb-2 border-bottom">
+      <span style="font-family: 'Pattaya', sans-serif; letter-spacing: 3px;">Kiseki</span> の特徴
+    </h3>
     <div class="row">
       <div class="col-lg-4 col-md-6 text-center">
         <img src="images/team.png" style="width: 79%;">
@@ -44,7 +58,9 @@
         </p>         
       </div>
     </div>
-    <h3 class="text-center my-4 pb-2 border-bottom">Kisekiの使い方</h3>
+    <h3 class="text-center my-4 pb-2 border-bottom">
+      <span style="font-family: 'Pattaya', sans-serif; letter-spacing: 3px;">Kiseki</span> の使い方
+    </h3>
     <div class="row">
       <div class="col-lg-4 col-md-6 text-center mb-2">
         <i class="fas fa-3x fa-pen text-primary mb-4"></i>

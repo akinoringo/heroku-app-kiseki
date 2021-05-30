@@ -7,6 +7,7 @@ use App\Models\Goal;
 use App\Models\User;
 use App\Services\DayService;
 use App\Services\EffortService;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 
@@ -38,41 +39,87 @@ class EffortGraphController extends Controller
     // 目標タイトルを配列で取得
     $goalsTitle = $goals->pluck('title');
 
-    // 直近1週間の日付を配列で取得
-    $daysOnWeek = $this->DayService->getDaysOnWeek();    
-    // グラフ用フォーマット(配列)
-    $daysOnWeekFormated = $this->DayService->getDaysOnWeekFormated();
 
-    // 1週間の日別積み上げ回数を配列で取得
-    $effortsCountOnWeek = $this->EffortService->getEffortsCountOnWeek($goals, $daysOnWeek);    
-
-    // 1週間の日別積み上げ時間を配列で取得
-    $effortsTimeTotalOnWeek = $this->EffortService->getEffortsTimeTotalOnWeek($goals, $daysOnWeek);
-
+    // リクエストの日付を取得
     $startdate = $request->startdate;
     $enddate = $request->enddate;
 
+    $diffInDays = $this->DayService->getDiffInDays($startdate, $enddate);
+
     // 日付の範囲を指定した場合
-    if ($startdate && $enddate) {
+    if ($startdate && $enddate && $diffInDays <= 31 ) {
+
       $daysForGraph = $this->DayService->getDaysForGraph($startdate, $enddate);
-      $daysForGraphFormated = $this->DayService->getDaysForGraphFormated($startdate, $enddate);
-      $parametersCountForGraph = $this->EffortService->getEffortsCountOnWeek($goals, $daysForGraph); 
-      $parametersTimeForGraph = $this->EffortService->getEffortsTimeTotalOnWeek($goals, $daysForGraph);
+
+      $parametersXForGraph = $this->DayService->getDaysForGraphFormated($startdate, $enddate);
+      $parametersCountForGraph = $this->EffortService->getEffortsCountOnDays($goals, $daysForGraph); 
+      $parametersTimeForGraph = $this->EffortService->getEffortsTimeTotalOnDays($goals, $daysForGraph);
 
 
-    } else { // 日付の範囲を指定していない場合は、今週1週間の軌跡を取得
+    } else if ($startdate && $enddate && $diffInDays <= 62) {
 
-      $daysForGraphFormated = $daysOnWeekFormated;
+      // 
+      $daysForGraph = $this->DayService->getWeeksForGraph($startdate, $enddate);
+
+      $parametersXForGraph = $this->DayService->getWeeksForGraphFormated($daysForGraph);
+      // $parametersXForGraph = $daysForGraph;  
+      
+
+      $parametersCountForGraph = $this->EffortService->getEffortsCountOnWeeks($goals, $daysForGraph);
+
+      // $parametersCountForGraph　= [2,4];
+
+      $parametersTimeForGraph = $this->EffortService->getEffortsTimeTotalOnWeeks($goals, $daysForGraph);  
+      // $parametersTimeForGraph = 4;             
+
+    } else if ($startdate && $enddate && $diffInDays > 62) {
+
+      // リクエスト範囲の年月日を配列で取得['3月5日 17:00', '4月5日 17:00', '5月5日 17:00']
+      $months = $this->DayService->getMonthsForGraph($startdate, $enddate);
+
+      $parametersXForGraph = $this->DayService->getMonthsForGraphFormated($months);
+
+      // $parametersXForGraph = $months;
+
+      $parametersCountForGraph = $this->EffortService->getEffortsCountOnMonth($goals, $months);
+
+      // $parametersCountForGraph = [10, 20, 30];
+
+
+      $parametersTimeForGraph = $this->EffortService->getEffortsTimeTotalOnMonth($goals, $months);
+
+      // $parametersTimeForGraph = [20, 40, 60];
+
+
+
+    }
+
+    else { // 日付の範囲を指定していない場合は、今週1週間の軌跡を取得
+
+      // 直近1週間の日付を配列で取得
+      $daysOnWeek = $this->DayService->getDaysOnWeek(); 
+
+      // グラフ用フォーマット(配列)
+      $daysOnWeekFormated = $this->DayService->getDaysOnWeekFormated(); 
+
+      // 1週間の日別積み上げ回数を配列で取得
+      $effortsCountOnWeek = $this->EffortService->getEffortsCountOnDays($goals, $daysOnWeek);    
+
+      // 1週間の日別積み上げ時間を配列で取得
+      $effortsTimeTotalOnWeek = $this->EffortService->getEffortsTimeTotalOnDays($goals, $daysOnWeek);            
+
+      $parametersXForGraph = $daysOnWeekFormated;
       $parametersCountForGraph = $effortsCountOnWeek;
       $parametersTimeForGraph = $effortsTimeTotalOnWeek;
+
     }    
 
     return [
       'goalsTitle' => $goalsTitle, // 必須
-      'daysOnWeekFormated' => $daysForGraphFormated, // 必須
+      'daysOnWeekFormated' => $parametersXForGraph, // 必須
       'effortsCountOnWeek' => $parametersCountForGraph, // 必須
       'effortsTimeTotalOnWeek' => $parametersTimeForGraph, // 必須
-      'daysForGraph' => $daysForGraphFormated, // 必須
+      'daysForGraph' => ['test1', 'test2'], // 必須
     ];     
 
   }

@@ -2,8 +2,9 @@
 	<div>
     <div class="text-center mb-2">
       <input type="date" v-model="startdate" placeholder="20210924">
+      ~
       <input type="date" v-model="enddate" placeholder="20210924">
-      <button type="submit" @click="rerender" class="btn btn-sm btn-info text-white">グラフ表示</button>
+      <button type="submit" @click="rerender" class="btn btn-sm btn-info text-white">表示</button>
     </div>		
     <div class="text-center">
 			<label>
