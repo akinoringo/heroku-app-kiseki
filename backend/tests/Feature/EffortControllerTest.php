@@ -24,7 +24,7 @@ class EffortControllerTest extends TestCase
 
     	$responce->assertStatus(200)
             ->assertViewIs('home')
-            ->assertSee('Kisekiとは？');
+            ->assertSee('とは？');
     }
 
     /**
