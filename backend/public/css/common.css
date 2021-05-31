@@ -15,7 +15,7 @@
     width: 600px;
   } 
   .graph-area-responsive {
-    min-height: 690px;
+    min-height: 700px;
   }
 }
 
@@ -25,7 +25,7 @@
     width: 500px;
   } 
   .graph-area-responsive {
-    min-height: 590px;
+    min-height: 600px;
   }  
 }
 
@@ -35,6 +35,6 @@
     width: 370px;
   } 
   .graph-area-responsive {
-    min-height: 490px;
+    min-height: 500px;
   }  
 }

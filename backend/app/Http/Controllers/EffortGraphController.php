@@ -90,7 +90,7 @@ class EffortGraphController extends Controller
       $parametersTimeForGraph = $this->EffortService->getEffortsTimeTotalOnDays($goals, $daysForGraph);
 
 
-    } else if ($startdate && $enddate && $diffInDays <= 62) {
+    } else if ($startdate && $enddate && $diffInDays <= 92) {
 
       // 
       $daysForGraph = $this->DayService->getWeeksForGraph($startdate, $enddate);
@@ -106,7 +106,7 @@ class EffortGraphController extends Controller
       $parametersTimeForGraph = $this->EffortService->getEffortsTimeTotalOnWeeks($goals, $daysForGraph);  
       // $parametersTimeForGraph = 4;             
 
-    } else if ($startdate && $enddate && $diffInDays > 62) {
+    } else if ($startdate && $enddate && $diffInDays > 92) {
 
       // リクエスト範囲の年月日を配列で取得['3月5日 17:00', '4月5日 17:00', '5月5日 17:00']
       $months = $this->DayService->getMonthsForGraph($startdate, $enddate);
