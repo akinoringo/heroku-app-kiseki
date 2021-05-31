@@ -2052,6 +2052,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2064,6 +2074,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       startdate: "",
       enddate: "",
+      errorsStartdate: [],
+      errorsEnddate: [],
       apiEffortData: {},
       countData: {},
       timeData: {},
@@ -2140,12 +2152,18 @@ __webpack_require__.r(__webpack_exports__);
           enddate: this.enddate
         }
       }).then(function (responce) {
-        _this3.apiEffortData = responce.data;
-        console.log(responce.data.daysForGraph);
+        if (responce.data.result === false) {
+          _this3.errorsStartdate = responce.data.errors['startdate'];
+          _this3.errorsEnddate = responce.data.errors['enddate'];
+        } else {
+          _this3.errorsStartdate = [];
+          _this3.errorsEnddate = [];
+          _this3.apiEffortData = responce.data;
 
-        _this3.setDatasets();
+          _this3.setDatasets();
 
-        _this3.setChart();
+          _this3.setChart();
+        }
       });
     }
   }
@@ -77752,6 +77770,26 @@ var render = function() {
           _vm._v("積み上げた時間\n\t\t\t")
         ])
       ]),
+      _vm._v(" "),
+      _c(
+        "ul",
+        _vm._l(_vm.errorsStartdate, function(error) {
+          return _c("li", { key: error, staticClass: "text-danger" }, [
+            _vm._v("\n\t\t\t\t" + _vm._s(error) + "\n\t\t\t")
+          ])
+        }),
+        0
+      ),
+      _vm._v(" "),
+      _c(
+        "ul",
+        _vm._l(_vm.errorsEnddate, function(error) {
+          return _c("li", { key: error, staticClass: "text-danger" }, [
+            _vm._v("\n\t\t\t\t" + _vm._s(error) + "\n\t\t\t")
+          ])
+        }),
+        0
+      ),
       _vm._v(" "),
       _c("bar-chart", {
         directives: [

@@ -13,13 +13,23 @@
 			<label class="ml-2">
 				<input type="radio" v-model="chartType" value="2">積み上げた時間
 			</label>	    	
-    </div>			
+    </div>	
+		<ul>
+			<li class="text-danger" v-for="error in errorsStartdate" :key="error">
+				{{ error }}
+			</li>			
+		</ul>	
+		<ul>
+			<li class="text-danger" v-for="error in errorsEnddate" :key="error">
+				{{ error }}
+			</li>			
+		</ul>			    		
 		<bar-chart 
 			:chartData="countData" ylabel="積み上げ回数 (回)" ref="countChart" v-show="chartType === '1' ">
 		</bar-chart>		
 		<bar-chart 
 			:chartData="timeData" ylabel="積み上げ時間 (時間)" ref="timeChart" v-show="chartType === '2' ">
-		</bar-chart>
+		</bar-chart>	
 	</div>
 </template>
 
@@ -36,6 +46,8 @@ export default {
 		return {
 			startdate: "",
 			enddate: "",
+			errorsStartdate: [],
+			errorsEnddate: [],
 			apiEffortData: {},
 			countData: {},
 			timeData: {},
@@ -101,12 +113,28 @@ export default {
 						}
 				})
 				.then(responce => {
-					this.apiEffortData = responce.data;
-					console.log(responce.data.daysForGraph);
-					this.setDatasets();
-					this.setChart();			
-				});
+					if (responce.data.result === false) {
+						this.errorsStartdate = responce.data.errors['startdate'];
+						this.errorsEnddate = responce.data.errors['enddate'];
+					} else {
+						this.errorsStartdate = [];
+						this.errorsEnddate = [];
+						this.apiEffortData = responce.data;
+						this.setDatasets();
+						this.setChart();						
+					}		
+				});				
 		},
 	}
 };
 </script>
+
+
+
+
+
+
+
+
+
+
