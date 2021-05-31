@@ -40,7 +40,6 @@ class EffortGraphController extends Controller
     'enddate' => '最終日',
   ];
 
-
   ### マイページのグラフ表示に必要なパラメータを取得 ###
   // 戻り値：目標タイトル, 直近1週間の日付, 軌跡の積み上げ数, 軌跡の積み上げ時間
   public function index($id, Request $request){
