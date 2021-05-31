@@ -9,6 +9,7 @@ use App\Services\DayService;
 use App\Services\EffortService;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class EffortGraphController extends Controller
@@ -22,9 +23,41 @@ class EffortGraphController extends Controller
     $this->EffortService = $effort_service;
   }  
 
-  // マイページのグラフ表示に必要なパラメータを取得
+  // グラフの検索日時のバリデーション設定
+  const INQUIRY_VALIDATIONS = [
+    'startdate' => 'nullable|date|before:today',
+    'enddate' => 'nullable|date|before_or_equal:today|after:startdate',
+  ];
+
+  const INQUIRY_MESSAGES = [
+    'before' => ':attributeは今日より前の日付を入力してください',
+    'after' => ':attributeは開始日よりも後の日付を入力してください',
+    'before_or_equal' => ':attributeは今日以前の日付を入力してください'
+  ];
+
+  const INQURY_ATTRIBUTIONS = [
+    'startdate' => '開始日',
+    'enddate' => '最終日',
+  ];
+
+  ### マイページのグラフ表示に必要なパラメータを取得 ###
   // 戻り値：目標タイトル, 直近1週間の日付, 軌跡の積み上げ数, 軌跡の積み上げ時間
   public function index($id, Request $request){
+
+    // 日付の検索日時のバリデーション
+    $validator = Validator::make(
+      $request->only('startdate', 'enddate'), 
+      self::INQUIRY_VALIDATIONS, 
+      self::INQUIRY_MESSAGES,
+      self::INQURY_ATTRIBUTIONS); 
+
+    // バリデーションに失敗した場合は、エラーをJSON形式で返す。
+    if ($validator->fails()) {
+        return response()->json([
+            'result' => false,
+            'errors' => $validator->errors(),
+        ]);
+    }       
 
     // viewから受け渡された$idに対応するユーザーの取得
     $user = User::find($id);
@@ -56,7 +89,7 @@ class EffortGraphController extends Controller
       $parametersTimeForGraph = $this->EffortService->getEffortsTimeTotalOnDays($goals, $daysForGraph);
 
 
-    } else if ($startdate && $enddate && $diffInDays <= 62) {
+    } else if ($startdate && $enddate && $diffInDays <= 92) {
 
       // 
       $daysForGraph = $this->DayService->getWeeksForGraph($startdate, $enddate);
@@ -72,7 +105,7 @@ class EffortGraphController extends Controller
       $parametersTimeForGraph = $this->EffortService->getEffortsTimeTotalOnWeeks($goals, $daysForGraph);  
       // $parametersTimeForGraph = 4;             
 
-    } else if ($startdate && $enddate && $diffInDays > 62) {
+    } else if ($startdate && $enddate && $diffInDays > 92) {
 
       // リクエスト範囲の年月日を配列で取得['3月5日 17:00', '4月5日 17:00', '5月5日 17:00']
       $months = $this->DayService->getMonthsForGraph($startdate, $enddate);
@@ -119,7 +152,7 @@ class EffortGraphController extends Controller
       'daysOnWeekFormated' => $parametersXForGraph, // 必須
       'effortsCountOnWeek' => $parametersCountForGraph, // 必須
       'effortsTimeTotalOnWeek' => $parametersTimeForGraph, // 必須
-      'daysForGraph' => ['test1', 'test2'], // 必須
+      'daysForGraph' => 'test', // 必須
     ];     
 
   }

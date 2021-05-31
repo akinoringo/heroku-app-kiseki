@@ -11,7 +11,7 @@
   </li>   
   <li class="nav-item text-center">
     <a class="nav-link" id="pills-graph-tab" data-toggle="pill" href="#pills-graph" role="tab" aria-controls="pills-graph" aria-selected="true">
-      今週の積み上げ
+      積み上げグラフ
     </a> 
   </li>   
 </ul>
@@ -30,6 +30,15 @@
   </div> 
   <div class="tab-pane fade graph-area-responsive" id="pills-graph" role="tabpanel" aria-labelledby="pills-graph-tab">
     @if ($goals->isNotEmpty())
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif    
     <div>         
       <div class="graph-area">        
         <effort-chart userid='@json($id)'></effort-chart>

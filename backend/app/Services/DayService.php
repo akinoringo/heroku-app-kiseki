@@ -76,11 +76,11 @@ class DayService{
 
     //週の始まりの日付
     $startOfWeek = now()->startOfWeek();
-    $daysOnWeek[0] = $startOfWeek->format('n/d');    
+    $daysOnWeek[0] = $startOfWeek->format('n/j');    
 
     //Carbonのインスタンスが上書きされないようにcopy()して日付を加算
     for ($i=1; $i < $numOfDays ; $i++) {
-      $daysOnWeek[$i] = $startOfWeek->copy()->addDay($i)->format('n/d');
+      $daysOnWeek[$i] = $startOfWeek->copy()->addDay($i)->format('n/j');
     }
 
     return $daysOnWeek;
@@ -124,11 +124,11 @@ class DayService{
 
     $start = $startdateOnCarbon;
 
-    $daysForGraph[0] = $start->format('n/d');
+    $daysForGraph[0] = $start->format('n/j');
 
     //Carbonのインスタンスが上書きされないようにcopy()して日付を加算
     for ($i=1; $i <= $diffInDays ; $i++) {
-      $daysForGraph[$i] = $start->copy()->addDay($i)->format('n/d');
+      $daysForGraph[$i] = $start->copy()->addDay($i)->format('n/j');
     }    
 
     return $daysForGraph;
