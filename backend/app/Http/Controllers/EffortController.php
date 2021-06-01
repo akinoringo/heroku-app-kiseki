@@ -128,20 +128,11 @@ class EffortController extends Controller
 		//軌跡の保存処理
 		$this->EffortRepository->storeEffort($effort, $request);
 
-		// 目標の継続時間合計を保存。
+		// 目標の継続時間合計を更新。
 		$this->EffortService->storeEffortsTime($goal);	
 
-		// ログインユーザーを取得
-		$user = User::where('id', Auth::user()->id)->first();
-
-		// 積み上げ時間が99時間以上でバッジを獲得
-		$this->BadgeService->getEffortsTimeBadge($user, $goal);
-		// 積み上げ日数が10日以上でバッジを獲得
-		$this->BadgeService->getStackingDaysBadge($user, $goal);	
-		// 目標をクリアしたら、バッジを獲得
-		$this->BadgeService->getGoalClearBadge($user, $goal);
-
-		$user->save();
+		// 積み上げ時間や日数に応じてバッジを獲得
+		$this->BadgeService->updateBadges($goal);
 
 		// 目標達成期限を過ぎていた場合はアラートを出す。
 		$this->DayService->checkGoalDeadline($goal);
@@ -233,17 +224,8 @@ class EffortController extends Controller
 		// $this->GoalService->updateGoalStatus($goal, $efforts);		
 		$goal->save();
 
-
-		// ログインユーザーを取得
-		$user = User::where('id', Auth::user()->id)->first();
-
-		// 積み上げ時間が99時間以上でバッジを獲得
-		$this->BadgeService->getEffortsTimeBadge($user, $goal);
-		// 積み上げ日数が10日以上でバッジを獲得
-		$this->BadgeService->getStackingDaysBadge($user, $goal);	
-		// 目標をクリアしたら、バッジを獲得
-		$this->BadgeService->getGoalClearBadge($user, $goal);
-		$user->save();		
+		// 積み上げ時間や日数に応じてバッジを獲得
+		$this->BadgeService->updateBadges($goal);		
 
 		return redirect()
 						->route('mypage.show', ['id' => Auth::user()->id])

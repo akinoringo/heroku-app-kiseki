@@ -8,10 +8,22 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class BadgeService{
+
+	// バッジの更新処理
+	public function updateBadges($goal)
+	{
+		$user = Auth::user();
+		$this->getEffortsTimeBadge($user, $goal);
+		$this->getStackingDaysBadge($user, $goal);
+		$this->getGoalClearBadge($user, $goal);
+	}
+
+
 	// 積み上げ時間が99時間以上でバッジを獲得
 	public function getEffortsTimeBadge($user, $goal){
 		if ($goal->efforts_time > 99 && $user->efforts_time_badge == 0) {
 			$user->efforts_time_badge = 1;
+			$user->save();
 			session()->flash('badge_message', 'おめでとうございます。忍耐力の称号を取得しました。');
 			session()->flash('badge_color', 'primary');				
 		}		
@@ -21,6 +33,7 @@ class BadgeService{
 	public function getStackingDaysBadge($user, $goal){
 		if ($goal->stacking_days > 9 && $user->stacking_days_badge == 0) {
 			$user->stacking_days_badge = 1;
+			$user->save();
 			session()->flash('badge_message', 'おめでとうございます。継続力の称号を取得しました。');
 			session()->flash('badge_color', 'primary');				
 		}			
@@ -30,6 +43,7 @@ class BadgeService{
 	public function getGoalClearBadge($user, $goal){
 		if ($goal->status == 1 && $user->goal_clear_badge == 0) {
 			$user->goal_clear_badge = 1;
+			$user->save();
 			session()->flash('badge_message', 'おめでとうございます。達成力の称号を取得しました。');
 			session()->flash('badge_color', 'primary');				
 
