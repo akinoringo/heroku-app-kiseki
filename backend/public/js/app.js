@@ -2114,8 +2114,6 @@ __webpack_require__.r(__webpack_exports__);
         _this2.$refs.countChart.renderBarChart();
 
         _this2.$refs.timeChart.renderBarChart();
-
-        console.log("グラフ表示しました");
       });
     },
     setDatasets: function setDatasets() {
