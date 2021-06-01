@@ -13,6 +13,7 @@ use App\Services\DayService;
 use App\Services\EffortService;
 use App\Services\GoalService;
 use App\Services\RankingService;
+use App\Services\TagService;
 use App\Services\TimeService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,18 +27,20 @@ class EffortController extends Controller
 	protected $effort_service;
 	protected $goal_service;
 	protected $ranking_service;
+	protected $tag_service;
 	protected $time_service;
 	protected $effort_repository;
 	protected $goal_repository;
   
-	public function __construct(EffortRepository $effort_repository, GoalRepository $goal_repository, RankingService $ranking_service, BadgeService $badge_service, DayService $day_service, EffortService $effort_service, GoalService $goal_service, TimeService $time_service)
+	public function __construct(TagService $tag_service, EffortRepository $effort_repository, GoalRepository $goal_repository, RankingService $ranking_service, BadgeService $badge_service, DayService $day_service, EffortService $effort_service, GoalService $goal_service, TimeService $time_service)
 	{
 		// Serviceクラスからインスタンスを作成
 		$this->BadgeService = $badge_service;
 		$this->DayService = $day_service;
 		$this->EffortService = $effort_service;
 		$this->GoalService = $goal_service;
-		$this->RankingService = $ranking_service;			
+		$this->RankingService = $ranking_service;	
+		$this->TagService = $tag_service;		
 		$this->TimeService = $time_service;	
 
 		// Repositoryクラスからインスタンスを作成
@@ -137,26 +140,8 @@ class EffortController extends Controller
 		// 目標達成期限を過ぎていた場合はアラートを出す。
 		$this->DayService->checkGoalDeadline($goal);
 
-		$tag_first = $effort->goal->tags->first() ?? null;
-
-		if ($tag_first !== null) {
-			foreach ($effort->goal->tags as $tag) {
-
-				if ($tag === $tag_first) {
-					$hashtags = $tag_first->name;
-
-				}
-				if ($tag !== $tag_first) {
-
-					$hashtags .= "," . $tag->name;
-				}			
-			}			
-
-		} else {
-
-			$hashtags = "軌跡";
-
-		}
+		// 軌跡が紐づく目標のタグを取得
+		$hashtags = $this->TagService->getHashtagsForShare($effort);
 		
 		return redirect()
 						->route('mypage.show', [
