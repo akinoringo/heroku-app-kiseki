@@ -36,9 +36,11 @@ class ProfileController extends Controller
 		$goal_label = $request->label;		
 
 		// $userと$goal_labelに対応する目標を配列として取得
+		$goals = Goal::where('user_id', $user->id)
+			->orderBy('created_at', 'DESC')
+			->paginate(5, ["*"], "goalspage");
+
 		// $goalひとつひとつに紐づく$effortを配列として取得
-		$goals = Goal::where('user_id', $user->id)->orderBy('created_at', 'DESC')->paginate(5, ["*"], "goalspage");
-		
 		$efforts = Effort::where('user_id', $user->id)
 			->where('status', 0)
 			->orderBy('created_at', 'DESC')
