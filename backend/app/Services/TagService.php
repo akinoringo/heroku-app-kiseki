@@ -9,11 +9,26 @@ use App\Models\Tag;
 class TagService {
 
 	/**
-		* タグの取得
+		* すべてのタグ名を取得
+		* @param Tag $tag
+		* @return  string
+	*/
+	public function getAllTagNames()
+	{
+    $allTagNames = Tag::all()->map(function ($tag) {
+        return ['text' => $tag->name];
+    });
+
+    return $allTagNames;
+	}
+
+
+	/**
+		* 軌跡が紐づいている目標のタグを取得
 		* @param Effort $effort
 		* @param Goal $goal
 		* @param Tag $tag
-		* @return  \Illuminate\Http\RedirectResponse
+		* @return  string
 	*/	
 	public function getHashtagsForShare($effort) {
 

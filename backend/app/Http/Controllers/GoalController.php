@@ -9,18 +9,21 @@ use App\Models\Tag;
 use App\Http\Requests\GoalRequest;
 use App\Repositories\Goal\GoalRepositoryInterface as GoalRepository;
 use App\Services\GoalService;
+use App\Services\TagService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
 
 class GoalController extends Controller
 {
 	protected $goal_service;
+	protected $tag_service;	
 	protected $goal_repository;	
 
-	public function __construct(GoalService $goal_service, GoalRepository $goal_repository)
+	public function __construct(GoalService $goal_service, TagService $tag_service, GoalRepository $goal_repository)
 	{
 		// Serviceクラスからインスタンスを作成
 		$this->GoalService = $goal_service;
+		$this->TagService = $tag_service;
 		// RepositoryのInterfaceのインスタンス化
 		$this->GoalRepository = $goal_repository;		
 		// GoalPolicyでCRUD操作を制限
@@ -41,9 +44,8 @@ class GoalController extends Controller
 		// 未達成の目標数が上限に達していない場合、新たに作成可能
 		if ($number !== 3){
 
-      $allTagNames = Tag::all()->map(function ($tag) {
-          return ['text' => $tag->name];
-      });				
+			// タグの自動補完のために、すべてのタグ名を取得
+			$allTagNames = $this->TagService->getAllTagNames();			
 
 			return view('goals.create', ['allTagNames' => $allTagNames]);
 
