@@ -3,10 +3,21 @@
 namespace App\Repositories\Effort;
 
 use App\Models\Effort;
+use App\Models\Goal;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class EffortRepository implements EffortRepositoryInterface
 {
+
+	/** 
+		* 軌跡を保存
+		* @param Effort $effort
+		* @param Request $request				
+		* @return  void
+	*/
 	public function storeEffort($effort, $request)
 	{
 		$effort->fill($request->all());
@@ -14,31 +25,36 @@ class EffortRepository implements EffortRepositoryInterface
 		$effort->save();
 	}
 
+	/** 
+		* 軌跡を更新
+		* @param Effort $effort
+		* @param Request $request				
+		* @return  void
+	*/
 	public function updateEffort($effort, $request)
 	{
 		$effort->fill($request->all());
 		$effort->save();		
 	}
 
+	/** 
+		* 軌跡を削除
+		* @param Effort $effort
+		* @return  void
+	*/
 	public function destroyEffort($effort)
 	{
 		$effort->status = 1;
 		$effort->save();		
 	}	
 
-	public function getEffortsWithSearch($search)
-	{
-		$efforts = Effort::where('status', 0)
-			->orderBy('created_at', 'desc')
-			->where(function($query) use ($search){
-				$query->orwhere('title', 'like', "%{$search}%")
-					->orwhere('content', 'like', "%{$search}%");
-			});
-
-		return $efforts;
-	}
-
-	public function getEffortsOfGoal($goal)
+	/** 
+		* 目標に紐づく未削除の軌跡をすべて取得
+		* @param Goal $goal
+		* @param Effort $effort
+		* @return Collection
+	*/
+	public function getEffortsOfGoal($goal): Builder
 	{
 		$effortsOfGoal = Effort::where('goal_id', $goal->id)
 			->where(function($query) {
@@ -49,16 +65,26 @@ class EffortRepository implements EffortRepositoryInterface
 
 	}
 
-	public function getEffortsOfFollowee()
+	/** 
+		* 未削除の軌跡をすべて取得
+		* @param Effort $effort
+		* @return  Builder
+	*/
+	public function getAllEffortsExist(): Builder
 	{
+		$allEffortsExist = Effort::where('status', 0);
 
-		$effortsOfFollowee = Effort::orderBy('created_at', 'DESC')
-			->whereIn('user_id', Auth::user()->followings()->pluck('followee_id'));		
+		return $allEffortsExist;
+	}	
 
-		return $effortsOfFollowee;
-	}
-
-	public function getEffortsOfADay($goal, $day)
+	/** 
+		* 目標に紐づく軌跡のうち、与えられた日にちのものを取得
+		* @param Goal $goal
+		* @param Date $day
+		* @param Effort $effort
+		* @return  Builder
+	*/
+	public function getEffortsOfADay($goal, $day): Builder
 	{
 		$effortsOfADay = Effort::where('goal_id', $goal->id)
 			->where(function($query) use ($day){
@@ -68,27 +94,42 @@ class EffortRepository implements EffortRepositoryInterface
 		return $effortsOfADay;
 	}
 
-	public function getEffortsOfAMonth($goal, $month)
-	{
-		$effortsOfAMonth = Effort::where('goal_id', $goal->id)
-			->where(function($query) use ($month){
-				$query
-					->whereDate('created_at', '>=', $month->firstOfMonth()->format('Y-m-d'))
-					->whereDate('created_at', '<=', $month->lastOfMonth()->format('Y-m-d'));
-			});		
-
-		return $effortsOfAMonth;
-	}	
-
-	public function getEffortsOfAWeek($goal, $week)
+	/** 
+		* 目標に紐づく軌跡のうち、与えられた日にちの週のものを取得
+		* @param Goal $goal
+		* @param Date $day		
+		* @param Effort $effort
+		* @return  Builder
+	*/
+	public function getEffortsOfAWeek($goal, $day): Builder
 	{
 		$effortsOfAWeek = Effort::where('goal_id', $goal->id)
-			->where(function($query) use ($week){
+			->where(function($query) use ($day){
 				$query
-					->whereDate('created_at', '>=', $week->startOfWeek()->format('Y-m-d'))
-					->whereDate('created_at', '<=', $week->endOfWeek()->format('Y-m-d'));
+					->whereDate('created_at', '>=', $day->startOfWeek()->format('Y-m-d'))
+					->whereDate('created_at', '<=', $day->endOfWeek()->format('Y-m-d'));
 			});		
 
 		return $effortsOfAWeek;
 	}		
+
+	/** 
+		* 目標に紐づく軌跡のうち、与えられた日にちの月のものを取得
+		* @param Goal $goal
+		* @param Date $day		
+		* @param Effort $effort
+		* @return  Builder
+	*/
+	public function getEffortsOfAMonth($goal, $day): Builder
+	{
+		$effortsOfAMonth = Effort::where('goal_id', $goal->id)
+			->where(function($query) use ($day){
+				$query
+					->whereDate('created_at', '>=', $day->firstOfMonth()->format('Y-m-d'))
+					->whereDate('created_at', '<=', $day->lastOfMonth()->format('Y-m-d'));
+			});		
+
+		return $effortsOfAMonth;
+	}	
+	
 }

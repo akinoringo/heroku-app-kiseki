@@ -8,13 +8,15 @@ interface EffortRepositoryInterface
 
 	public function updateEffort($effort, $request);
 
-	public function destroyEffort($effort);		
+	public function destroyEffort($effort);	
 
-	public function getEffortsWithSearch($search);	
+	public function getAllEffortsExist();	
 
 	public function getEffortsOfGoal($goal);	
 
-	public function getEffortsOfFollowee();
+	public function getEffortsOfADay($goal, $day);
 
-	public function getEffortsOfADay($goal, $day);		
+	public function getEffortsOfAWeek($goal, $day);	
+
+	public function getEffortsOfAMonth($goal, $day);		
 }

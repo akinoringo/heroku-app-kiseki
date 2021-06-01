@@ -3,7 +3,7 @@
 namespace App\Repositories\Goal;
 
 use App\Models\Goal;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 class GoalRepository implements GoalRepositoryInterface
 {
