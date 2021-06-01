@@ -120,7 +120,7 @@ class EffortController extends Controller
 	*/
 	public function store(EffortRequest $request, Effort $effort ){
 		// 軌跡に紐づく目標を取得
-		$goal = $this->GoalRepository->getGoalOfEffort($request->goal_id)->first();
+		$goal = $this->GoalRepository->getGoalById($request->goal_id)->first();
 
 		// 昨日および今日の軌跡を取得する。
 		[$efforts_yesterday, $efforts_today] = $this->EffortService->getEffortsYesterdayAndToday($goal);
@@ -196,7 +196,7 @@ class EffortController extends Controller
 		$goals = $this->GoalService->getGoalsOnProgress(Auth::user());
 
 		// 軌跡が紐づいている目標を取得
-		$goal = $this->GoalRepository->getGoalOfEffort($effort->goal_id)->first();
+		$goal = $this->GoalRepository->getGoalById($effort->goal_id)->first();
 
 		// 未達成の目標に紐づく軌跡なら編集可能
 		if ($goal->status == 0) {
@@ -229,7 +229,7 @@ class EffortController extends Controller
 		$this->EffortRepository->updateEffort($effort, $request);
 
 		// 軌跡に紐づく目標と、目標に紐づく軌跡を全て抽出
-		$goal = $this->GoalRepository->getGoalOfEffort($effort->goal_id)->first();
+		$goal = $this->GoalRepository->getGoalById($effort->goal_id)->first();
 		$efforts = $this->EffortService->getEffortsOfGoal($goal);
 
 		// 目標に紐づく軌跡の継続時間の合計をDBに保存		
@@ -267,7 +267,7 @@ class EffortController extends Controller
 	public function destroy(Effort $effort)
 	{
 		// 軌跡に紐づく目標の取得
-		$goal = $this->GoalRepository->getGoalOfEffort($effort->goal_id)->first();
+		$goal = $this->GoalRepository->getGoalById($effort->goal_id)->first();
 
 		// 軌跡に紐づく目標が未達成の場合は、軌跡を削除可能。
 		if ($goal->status === 0) {

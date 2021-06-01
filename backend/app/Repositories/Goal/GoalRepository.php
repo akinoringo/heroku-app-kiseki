@@ -3,10 +3,18 @@
 namespace App\Repositories\Goal;
 
 use App\Models\Goal;
+use Illuminate\Support\Collection;
 
 class GoalRepository implements GoalRepositoryInterface
 {
-	public function getGoalsOnProgress($user)
+	/** 
+		* goal_idによる目標の取得
+		* @param Request $request
+		* @param User $user
+		* @param Goal $goal
+		* @return  Illuminate\Support\Collection
+	*/	
+	public function getGoalsOnProgress($user): Collection
 	{
 		$goalsOnProgress = Goal::where('user_id', $user->id)
 			->where(function($query){
@@ -16,13 +24,25 @@ class GoalRepository implements GoalRepositoryInterface
 		return $goalsOnProgress;
 	}
 
-	public function getGoalOfEffort($id)
+	/** 
+		* goal_idによる目標の取得
+		* @param Request $request
+		* @param Goal $goal
+		* @return  Illuminate\Support\Collection
+	*/
+	public function getGoalById($id): Collection
 	{
-		$goal = Goal::where('id', $id);
+		$goal = Goal::where('id', $id)->get();
 
 		return $goal;
 	}
 
+	/** 
+		* 目標の保存
+		* @param Request $request
+		* @param Goal $goal
+		* @return  void
+	*/
 	public function storeGoal($request, $goal)
 	{
 		$goal->fill($request->all());
@@ -31,6 +51,12 @@ class GoalRepository implements GoalRepositoryInterface
 
 	}
 
+	/** 
+		* 目標の更新
+		* @param Request $request
+		* @param Goal $goal
+		* @return  void
+	*/
 	public function updateGoal($request, $goal)
 	{
 		$goal->fill($request->all());
@@ -38,11 +64,21 @@ class GoalRepository implements GoalRepositoryInterface
 
 	}	
 
+	/** 
+		* 目標の削除
+		* @param Goal $goal
+		* @return  void
+	*/
 	public function destroy($goal)
 	{
 		$goal->delete();
 	}
 
+	/** 
+		* 目標のクリア(ステータスカラムを変更)
+		* @param Goal $goal
+		* @return  void
+	*/
 	public function clear($goal)
 	{
 		$goal->status = 1;
