@@ -79,7 +79,6 @@ export default {
 			this.$nextTick(() => {
 				this.$refs.countChart.renderBarChart();
 				this.$refs.timeChart.renderBarChart();
-			console.log("グラフ表示しました");
 			});
 		},
 		setDatasets() {

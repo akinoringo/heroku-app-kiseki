@@ -79,7 +79,7 @@ class EffortGraphController extends Controller
 
     $diffInDays = $this->DayService->getDiffInDays($startdate, $enddate);
 
-    // 日付の範囲を指定した場合
+    // (日付の範囲) <= 31 (1ヶ月) の場合
     if ($startdate && $enddate && $diffInDays <= 31 ) {
 
       $daysForGraph = $this->DayService->getDaysForGraph($startdate, $enddate);
@@ -90,40 +90,26 @@ class EffortGraphController extends Controller
 
 
     } else if ($startdate && $enddate && $diffInDays <= 92) {
+      // (日付の範囲) <= 92 (3ヶ月) の場合
 
-      // 
       $daysForGraph = $this->DayService->getWeeksForGraph($startdate, $enddate);
 
-      $parametersXForGraph = $this->DayService->getWeeksForGraphFormated($daysForGraph);
-      // $parametersXForGraph = $daysForGraph;  
-      
+      $parametersXForGraph = $this->DayService->getWeeksForGraphFormated($daysForGraph);      
 
       $parametersCountForGraph = $this->EffortService->getEffortsCountOnWeeks($goals, $daysForGraph);
 
-      // $parametersCountForGraph　= [2,4];
-
       $parametersTimeForGraph = $this->EffortService->getEffortsTimeTotalOnWeeks($goals, $daysForGraph);  
-      // $parametersTimeForGraph = 4;             
 
     } else if ($startdate && $enddate && $diffInDays > 92) {
+      // (日付の範囲) > 92 (3ヶ月) の場合
 
-      // リクエスト範囲の年月日を配列で取得['3月5日 17:00', '4月5日 17:00', '5月5日 17:00']
       $months = $this->DayService->getMonthsForGraph($startdate, $enddate);
 
       $parametersXForGraph = $this->DayService->getMonthsForGraphFormated($months);
 
-      // $parametersXForGraph = $months;
-
       $parametersCountForGraph = $this->EffortService->getEffortsCountOnMonth($goals, $months);
 
-      // $parametersCountForGraph = [10, 20, 30];
-
-
       $parametersTimeForGraph = $this->EffortService->getEffortsTimeTotalOnMonth($goals, $months);
-
-      // $parametersTimeForGraph = [20, 40, 60];
-
-
 
     }
 

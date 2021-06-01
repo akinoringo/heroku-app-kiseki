@@ -13,6 +13,7 @@ use App\Services\DayService;
 use App\Services\EffortService;
 use App\Services\GoalService;
 use App\Services\RankingService;
+use App\Services\TagService;
 use App\Services\TimeService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,18 +27,20 @@ class EffortController extends Controller
 	protected $effort_service;
 	protected $goal_service;
 	protected $ranking_service;
+	protected $tag_service;
 	protected $time_service;
 	protected $effort_repository;
 	protected $goal_repository;
   
-	public function __construct(EffortRepository $effort_repository, GoalRepository $goal_repository, RankingService $ranking_service, BadgeService $badge_service, DayService $day_service, EffortService $effort_service, GoalService $goal_service, TimeService $time_service)
+	public function __construct(TagService $tag_service, EffortRepository $effort_repository, GoalRepository $goal_repository, RankingService $ranking_service, BadgeService $badge_service, DayService $day_service, EffortService $effort_service, GoalService $goal_service, TimeService $time_service)
 	{
 		// Serviceクラスからインスタンスを作成
 		$this->BadgeService = $badge_service;
 		$this->DayService = $day_service;
 		$this->EffortService = $effort_service;
 		$this->GoalService = $goal_service;
-		$this->RankingService = $ranking_service;			
+		$this->RankingService = $ranking_service;	
+		$this->TagService = $tag_service;		
 		$this->TimeService = $time_service;	
 
 		// Repositoryクラスからインスタンスを作成
@@ -120,57 +123,25 @@ class EffortController extends Controller
 	*/
 	public function store(EffortRequest $request, Effort $effort ){
 		// 軌跡に紐づく目標を取得
-		$goal = $this->GoalRepository->getGoalOfEffort($request->goal_id)->first();
+		$goal = $this->GoalRepository->getGoalById($request->goal_id)->first();
 
-		// 昨日および今日の軌跡を取得する。
-		[$efforts_yesterday, $efforts_today] = $this->EffortService->getEffortsYesterdayAndToday($goal);
-
-		// 積み上げ日数、継続日数を更新
-		$this->DayService->addStackingdays($goal, $efforts_today);
-		$this->DayService->updateContinuationdays($goal, $efforts_yesterday, $efforts_today);
-		$this->DayService->updateContinuationdaysmax($goal);
+		// 積み上げ日数や継続日数を更新
+		$this->DayService->updateDays($goal);
 
 		//軌跡の保存処理
 		$this->EffortRepository->storeEffort($effort, $request);
 
-		// 目標の継続時間合計を保存。
-		$this->EffortService->storeEffortsTime($goal);	
+		// 目標の継続時間合計を更新。
+		$this->EffortService->updateEffortsTime($goal);	
 
-		// ログインユーザーを取得
-		$user = User::where('id', Auth::user()->id)->first();
-
-		// 積み上げ時間が99時間以上でバッジを獲得
-		$this->BadgeService->getEffortsTimeBadge($user, $goal);
-		// 積み上げ日数が10日以上でバッジを獲得
-		$this->BadgeService->getStackingDaysBadge($user, $goal);	
-		// 目標をクリアしたら、バッジを獲得
-		$this->BadgeService->getGoalClearBadge($user, $goal);
-
-		$user->save();
+		// 積み上げ時間や日数に応じてバッジを獲得
+		$this->BadgeService->updateBadges($goal);
 
 		// 目標達成期限を過ぎていた場合はアラートを出す。
 		$this->DayService->checkGoalDeadline($goal);
 
-		$tag_first = $effort->goal->tags->first() ?? null;
-
-		if ($tag_first !== null) {
-			foreach ($effort->goal->tags as $tag) {
-
-				if ($tag === $tag_first) {
-					$hashtags = $tag_first->name;
-
-				}
-				if ($tag !== $tag_first) {
-
-					$hashtags .= "," . $tag->name;
-				}			
-			}			
-
-		} else {
-
-			$hashtags = "軌跡";
-
-		}
+		// 軌跡が紐づく目標のタグを取得
+		$hashtags = $this->TagService->getHashtagsForShare($effort);
 		
 		return redirect()
 						->route('mypage.show', [
@@ -196,7 +167,7 @@ class EffortController extends Controller
 		$goals = $this->GoalService->getGoalsOnProgress(Auth::user());
 
 		// 軌跡が紐づいている目標を取得
-		$goal = $this->GoalRepository->getGoalOfEffort($effort->goal_id)->first();
+		$goal = $this->GoalRepository->getGoalById($effort->goal_id)->first();
 
 		// 未達成の目標に紐づく軌跡なら編集可能
 		if ($goal->status == 0) {
@@ -229,26 +200,13 @@ class EffortController extends Controller
 		$this->EffortRepository->updateEffort($effort, $request);
 
 		// 軌跡に紐づく目標と、目標に紐づく軌跡を全て抽出
-		$goal = $this->GoalRepository->getGoalOfEffort($effort->goal_id)->first();
-		$efforts = $this->EffortService->getEffortsOfGoal($goal);
+		$goal = $this->GoalRepository->getGoalById($effort->goal_id)->first();
 
-		// 目標に紐づく軌跡の継続時間の合計をDBに保存		
-		$goal->efforts_time = $this->TimeService->sumEffortsTime($efforts);
-		//goal_time>total(effort_time)であれば目標ステータスを1に更新する。
-		// $this->GoalService->updateGoalStatus($goal, $efforts);		
-		$goal->save();
+		// 目標に紐づく軌跡の合計時間を更新		
+		$this->EffortService->updateEffortsTime($goal);
 
-
-		// ログインユーザーを取得
-		$user = User::where('id', Auth::user()->id)->first();
-
-		// 積み上げ時間が99時間以上でバッジを獲得
-		$this->BadgeService->getEffortsTimeBadge($user, $goal);
-		// 積み上げ日数が10日以上でバッジを獲得
-		$this->BadgeService->getStackingDaysBadge($user, $goal);	
-		// 目標をクリアしたら、バッジを獲得
-		$this->BadgeService->getGoalClearBadge($user, $goal);
-		$user->save();		
+		// 積み上げ時間や日数に応じてバッジを獲得
+		$this->BadgeService->updateBadges($goal);		
 
 		return redirect()
 						->route('mypage.show', ['id' => Auth::user()->id])
@@ -267,7 +225,7 @@ class EffortController extends Controller
 	public function destroy(Effort $effort)
 	{
 		// 軌跡に紐づく目標の取得
-		$goal = $this->GoalRepository->getGoalOfEffort($effort->goal_id)->first();
+		$goal = $this->GoalRepository->getGoalById($effort->goal_id)->first();
 
 		// 軌跡に紐づく目標が未達成の場合は、軌跡を削除可能。
 		if ($goal->status === 0) {
@@ -275,10 +233,8 @@ class EffortController extends Controller
 			// $effortのステータスを削除(1)に変更する。
 			$this->EffortRepository->destroyEffort($effort);
 
-			// 消去した$effortに紐づいていた$goalに紐づく軌跡合計時間($efforts_time)を再計算
-			$efforts = $this->EffortService->getEffortsOfGoal($goal);
-			$goal->efforts_time = $this->TimeService->sumEffortsTime($efforts);
-			$goal->save();
+			// 目標に紐づく軌跡の合計時間を更新		
+			$this->EffortService->updateEffortsTime($goal);
 		
 			return redirect()
 							->route('mypage.show', ['id' => Auth::user()->id])
