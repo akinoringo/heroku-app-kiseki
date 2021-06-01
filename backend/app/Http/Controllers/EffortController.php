@@ -233,10 +233,8 @@ class EffortController extends Controller
 			// $effortのステータスを削除(1)に変更する。
 			$this->EffortRepository->destroyEffort($effort);
 
-			// 消去した$effortに紐づいていた$goalに紐づく軌跡合計時間($efforts_time)を再計算
-			$efforts = $this->EffortService->getEffortsOfGoal($goal);
-			$goal->efforts_time = $this->TimeService->sumEffortsTime($efforts);
-			$goal->save();
+			// 目標に紐づく軌跡の合計時間を更新		
+			$this->EffortService->updateEffortsTime($goal);
 		
 			return redirect()
 							->route('mypage.show', ['id' => Auth::user()->id])
