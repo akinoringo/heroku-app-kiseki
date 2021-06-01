@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Tag;
 use App\Http\Requests\GoalRequest;
 use App\Repositories\Goal\GoalRepositoryInterface as GoalRepository;
+use App\Services\BadgeService;
 use App\Services\GoalService;
 use App\Services\TagService;
 use Illuminate\Http\Request;
@@ -15,13 +16,15 @@ use Illuminate\Support\Facades\Auth;
 
 class GoalController extends Controller
 {
+	protected $badge_service;
 	protected $goal_service;
 	protected $tag_service;	
 	protected $goal_repository;	
 
-	public function __construct(GoalService $goal_service, TagService $tag_service, GoalRepository $goal_repository)
+	public function __construct(BadgeService $badge_service, GoalService $goal_service, TagService $tag_service, GoalRepository $goal_repository)
 	{
 		// Serviceクラスからインスタンスを作成
+		$this->BadgeService = $badge_service;
 		$this->GoalService = $goal_service;
 		$this->TagService = $tag_service;
 		// RepositoryのInterfaceのインスタンス化
@@ -191,18 +194,14 @@ class GoalController extends Controller
 	*/
 	public function clear(Goal $goal)
 	{
+		// 目標に紐づく軌跡が5件以上でクリア処理実行
 		if ($goal->efforts()->count() > 4)
 		{
+			// 目標のクリア処理
 			$this->GoalRepository->clear($goal);		
 
-			$user = $goal->user;
-
-			if ($goal->status == 1 && $user->goal_clear_badge == 0) {
-				$user->goal_clear_badge = 1;
-				session()->flash('badge_message', 'おめでとうございます。達成力の称号を取得しました。');
-				session()->flash('badge_color', 'primary');		
-				$user->save();		
-			}	
+			// 目標達成時にバッジを獲得
+			$this->BadgeService->getGoalClearBadge($goal->user, $goal);
 
 			return redirect()
 							->route('mypage.show', ['id' => Auth::user()->id])
