@@ -122,13 +122,8 @@ class EffortController extends Controller
 		// 軌跡に紐づく目標を取得
 		$goal = $this->GoalRepository->getGoalById($request->goal_id)->first();
 
-		// 昨日および今日の軌跡を取得する。
-		[$efforts_yesterday, $efforts_today] = $this->EffortService->getEffortsYesterdayAndToday($goal);
-
-		// 積み上げ日数、継続日数を更新
-		$this->DayService->addStackingdays($goal, $efforts_today);
-		$this->DayService->updateContinuationdays($goal, $efforts_yesterday, $efforts_today);
-		$this->DayService->updateContinuationdaysmax($goal);
+		// 積み上げ日数や継続日数を更新
+		$this->DayService->updateDays($goal);
 
 		//軌跡の保存処理
 		$this->EffortRepository->storeEffort($effort, $request);

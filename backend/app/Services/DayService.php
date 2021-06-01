@@ -4,10 +4,36 @@ namespace App\Services;
 
 use App\Models\Effort;
 use App\Models\Goal;
+use App\Services\EffortService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class DayService{
+
+  protected $effort_service;
+
+  public function __construct(EffortService $effort_service)
+  {
+    $this->EffortService = $effort_service;
+  }
+
+  /**
+    * 目標に紐づく軌跡の継続日数を更新する
+    * @param Goal $goal
+    * @param Effort $effort
+    * @return  void
+  */  
+  public function updateDays($goal) {
+
+    [$efforts_yesterday, $efforts_today] = $this->EffortService
+      ->getEffortsYesterdayAndToday($goal);
+
+    $this->addStackingdays($goal, $efforts_today);
+    $this->updateContinuationdays($goal, $efforts_yesterday, $efforts_today);
+    $this->updateContinuationdaysmax($goal);
+  }
+
+
 	public function addStackingdays($goal, $efforts_today) {
 		// 本日の軌跡がなければ、積み上げ日数を+1
 		if ($efforts_today->isEmpty()) {
