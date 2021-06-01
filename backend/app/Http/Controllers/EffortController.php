@@ -129,7 +129,7 @@ class EffortController extends Controller
 		$this->EffortRepository->storeEffort($effort, $request);
 
 		// 目標の継続時間合計を更新。
-		$this->EffortService->storeEffortsTime($goal);	
+		$this->EffortService->updateEffortsTime($goal);	
 
 		// 積み上げ時間や日数に応じてバッジを獲得
 		$this->BadgeService->updateBadges($goal);
@@ -216,13 +216,9 @@ class EffortController extends Controller
 
 		// 軌跡に紐づく目標と、目標に紐づく軌跡を全て抽出
 		$goal = $this->GoalRepository->getGoalById($effort->goal_id)->first();
-		$efforts = $this->EffortService->getEffortsOfGoal($goal);
 
-		// 目標に紐づく軌跡の継続時間の合計をDBに保存		
-		$goal->efforts_time = $this->TimeService->sumEffortsTime($efforts);
-		//goal_time>total(effort_time)であれば目標ステータスを1に更新する。
-		// $this->GoalService->updateGoalStatus($goal, $efforts);		
-		$goal->save();
+		// 目標に紐づく軌跡の合計時間を更新		
+		$this->EffortService->updateEffortsTime($goal);
 
 		// 積み上げ時間や日数に応じてバッジを獲得
 		$this->BadgeService->updateBadges($goal);		

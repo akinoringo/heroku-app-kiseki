@@ -24,7 +24,7 @@ class EffortService{
     * @param Effort $effort
     * @return  void
   */
-	public function storeEffortsTime($goal)
+	public function updateEffortsTime($goal)
 	{
 		$efforts = $this->getEffortsOfGoal($goal);
 		$goal->efforts_time = $this->TimeService->sumEffortsTime($efforts);
