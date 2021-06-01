@@ -72,10 +72,8 @@ class GoalController extends Controller
 		// フォームリクエストで取得した情報をフィルターして保存
 		$this->GoalRepository->storeGoal($request, $goal);
 
-	  $request->tags->each(function ($tagName) use ($goal) {
-	      $tag = Tag::firstOrCreate(['name' => $tagName]);
-	      $goal->tags()->attach($tag);
-	  });			
+		// 受け取ったタグを目標にアタッチ
+		$this->TagService->storeTags($goal, $request);		
 
 		return redirect()
 						->route('mypage.show', ['id' => Auth::user()->id])
@@ -112,14 +110,11 @@ class GoalController extends Controller
 	{
 		if ($goal->status === 0){
 
-			// Vue Tags Inputでは、タグ名にtextというキーが必要という仕様
-      $tagNames = $goal->tags->map(function ($tag) {
-          return ['text' => $tag->name];
-      });				
+			// 目標に紐づくタグ名をすべて取得			
+			$tagNames = $this->TagService->getTagNamesByGoal($goal);			
 
-      $allTagNames = Tag::all()->map(function ($tag) {
-          return ['text' => $tag->name];
-      });			
+			// タグの自動補完のために、すべてのタグ名を取得
+			$allTagNames = $this->TagService->getAllTagNames();				
 
 			return view('goals.edit', [
 				'goal' => $goal,
@@ -150,12 +145,8 @@ class GoalController extends Controller
 		// $requestの内容を$goalに保存
 		$this->GoalRepository->updateGoal($request, $goal);
 
-    $goal->tags()->detach();
-
-    $request->tags->each(function ($tagName) use ($goal) {
-        $tag = Tag::firstOrCreate(['name' => $tagName]);
-        $goal->tags()->attach($tag);
-    });
+		// 目標に紐づくタグを更新
+		$this->TagService->updateTags($goal, $request);
 
 		return redirect()
 						->route('mypage.show', ['id' => Auth::user()->id])
