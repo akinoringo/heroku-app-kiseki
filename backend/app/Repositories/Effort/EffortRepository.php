@@ -66,13 +66,28 @@ class EffortRepository implements EffortRepositoryInterface
 	}
 
 	/** 
+		* 目標に紐づく未削除の軌跡をすべて取得
+		* @param Goal $goal
+		* @param Effort $effort
+		* @return Builder
+	*/
+	public function getAllEffortsOfAUser($user): Builder
+	{
+		$allEffortsOfAUSer = Effort::where('user_id', $user->id);
+
+		return $allEffortsOfAUSer;		
+
+	}
+
+	/** 
 		* 未削除の軌跡をすべて取得
 		* @param Effort $effort
 		* @return  Builder
 	*/
 	public function getAllEffortsExist(): Builder
 	{
-		$allEffortsExist = Effort::where('status', 0);
+		$allEffortsExist = Effort::where('status', 0)
+			->orderBy('created_at', 'desc');
 
 		return $allEffortsExist;
 	}	

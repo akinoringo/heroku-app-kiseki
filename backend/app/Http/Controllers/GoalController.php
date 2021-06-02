@@ -8,19 +8,25 @@ use App\Models\User;
 use App\Models\Tag;
 use App\Http\Requests\GoalRequest;
 use App\Repositories\Goal\GoalRepositoryInterface as GoalRepository;
+use App\Services\BadgeService;
 use App\Services\GoalService;
+use App\Services\TagService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
 
 class GoalController extends Controller
 {
+	protected $badge_service;
 	protected $goal_service;
+	protected $tag_service;	
 	protected $goal_repository;	
 
-	public function __construct(GoalService $goal_service, GoalRepository $goal_repository)
+	public function __construct(BadgeService $badge_service, GoalService $goal_service, TagService $tag_service, GoalRepository $goal_repository)
 	{
 		// Serviceクラスからインスタンスを作成
+		$this->BadgeService = $badge_service;
 		$this->GoalService = $goal_service;
+		$this->TagService = $tag_service;
 		// RepositoryのInterfaceのインスタンス化
 		$this->GoalRepository = $goal_repository;		
 		// GoalPolicyでCRUD操作を制限
@@ -41,9 +47,8 @@ class GoalController extends Controller
 		// 未達成の目標数が上限に達していない場合、新たに作成可能
 		if ($number !== 3){
 
-      $allTagNames = Tag::all()->map(function ($tag) {
-          return ['text' => $tag->name];
-      });				
+			// タグの自動補完のために、すべてのタグ名を取得
+			$allTagNames = $this->TagService->getAllTagNames();			
 
 			return view('goals.create', ['allTagNames' => $allTagNames]);
 
@@ -70,10 +75,8 @@ class GoalController extends Controller
 		// フォームリクエストで取得した情報をフィルターして保存
 		$this->GoalRepository->storeGoal($request, $goal);
 
-	  $request->tags->each(function ($tagName) use ($goal) {
-	      $tag = Tag::firstOrCreate(['name' => $tagName]);
-	      $goal->tags()->attach($tag);
-	  });			
+		// 受け取ったタグを目標にアタッチ
+		$this->TagService->storeTags($goal, $request);		
 
 		return redirect()
 						->route('mypage.show', ['id' => Auth::user()->id])
@@ -110,14 +113,11 @@ class GoalController extends Controller
 	{
 		if ($goal->status === 0){
 
-			// Vue Tags Inputでは、タグ名にtextというキーが必要という仕様
-      $tagNames = $goal->tags->map(function ($tag) {
-          return ['text' => $tag->name];
-      });				
+			// 目標に紐づくタグ名をすべて取得			
+			$tagNames = $this->TagService->getTagNamesByGoal($goal);			
 
-      $allTagNames = Tag::all()->map(function ($tag) {
-          return ['text' => $tag->name];
-      });			
+			// タグの自動補完のために、すべてのタグ名を取得
+			$allTagNames = $this->TagService->getAllTagNames();				
 
 			return view('goals.edit', [
 				'goal' => $goal,
@@ -148,12 +148,8 @@ class GoalController extends Controller
 		// $requestの内容を$goalに保存
 		$this->GoalRepository->updateGoal($request, $goal);
 
-    $goal->tags()->detach();
-
-    $request->tags->each(function ($tagName) use ($goal) {
-        $tag = Tag::firstOrCreate(['name' => $tagName]);
-        $goal->tags()->attach($tag);
-    });
+		// 目標に紐づくタグを更新
+		$this->TagService->updateTags($goal, $request);
 
 		return redirect()
 						->route('mypage.show', ['id' => Auth::user()->id])
@@ -198,18 +194,14 @@ class GoalController extends Controller
 	*/
 	public function clear(Goal $goal)
 	{
+		// 目標に紐づく軌跡が5件以上でクリア処理実行
 		if ($goal->efforts()->count() > 4)
 		{
+			// 目標のクリア処理
 			$this->GoalRepository->clear($goal);		
 
-			$user = $goal->user;
-
-			if ($goal->status == 1 && $user->goal_clear_badge == 0) {
-				$user->goal_clear_badge = 1;
-				session()->flash('badge_message', 'おめでとうございます。達成力の称号を取得しました。');
-				session()->flash('badge_color', 'primary');		
-				$user->save();		
-			}	
+			// 目標達成時にバッジを獲得
+			$this->BadgeService->getGoalClearBadge($goal->user, $goal);
 
 			return redirect()
 							->route('mypage.show', ['id' => Auth::user()->id])

@@ -7,6 +7,8 @@ use App\Models\Goal;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProfileRequest;
+use App\Services\EffortService;
+use App\Services\GoalService;
 use Illuminate\Http\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +18,17 @@ use Illuminate\Support\Facades\App;
 
 class ProfileController extends Controller
 {
+
+	protected $effort_service;
+	protected $goal_service;
+  
+	public function __construct(EffortService $effort_service, GoalService $goal_service)
+	{
+		// Serviceクラスからインスタンスを作成
+		$this->GoalService = $goal_service;
+		$this->EffortService = $effort_service;		
+	}	
+
 	/**
 		* マイページの表示
 		* プロフィール、目標および軌跡を表示
@@ -29,27 +42,15 @@ class ProfileController extends Controller
 
 		// viewから受け渡された$idに対応するユーザーの取得
 		$id = (int)$id;
-		$user = User::find($id);
+		$user = User::find($id);	
 
-		// リクエストから検索条件と目標のステータス(0：未クリア、1：クリア済み)の取得
-		$search = $request->search;
-		$goal_label = $request->label;		
+		// ユーザーの目標をすべて取得
+		$goals = $this->GoalService->getAllGoalsOfAUser($user);
 
-		// $userと$goal_labelに対応する目標を配列として取得
-		$goals = Goal::where('user_id', $user->id)
-			->orderBy('created_at', 'DESC')
-			->paginate(5, ["*"], "goalspage");
+		// 未削除の軌跡をすべて取得
+		$efforts = $this->EffortService->getAllEffortsOfAUser($user);
 
-		// $goalひとつひとつに紐づく$effortを配列として取得
-		$efforts = Effort::where('user_id', $user->id)
-			->where('status', 0)
-			->orderBy('created_at', 'DESC')
-			->paginate(5, ["*"], "effortspage");
-
-		// 達成済みの目標を配列で取得
-		$cleared_goals = $this->goalsGet($user, 1);
-
-		return view('mypage.show', compact('user', 'goals', 'efforts', 'goal_label', 'search', 'cleared_goals', 'id'));
+		return view('mypage.show', compact('user', 'goals', 'efforts', 'id'));
 
 	}
 
@@ -166,51 +167,6 @@ class ProfileController extends Controller
 		]);		
 	}
 
-	/**
-		* ユーザーの(未達成or達成済みの)目標を全て取得する
-		* @param Goal $goal
-		* @return Builder
-	*/		
-	private function goalsGet($user, $goal_label)
-	{
-		if ($goal_label == 1) {
-			$goals = Goal::where('user_id', $user->id)
-				->where(function($goals){
-					$goals->where('status', 1);
-				})->get();
-		} else {
-			$goals = Goal::where('user_id', $user->id)
-				->where(function($goals){
-					$goals->where('status', 0);
-				})->get();			
-		}
-
-		return $goals;
-	}
-
-	/**
-		* 目標に紐づく軌跡を配列で取得する
-		* @param Goal $goal
-		* @param Effort $effort
-		* @return Array
-	*/
-	private function effortsGet($goals, $search)
-	{
-
-		$efforts = [];
-
-		foreach ($goals as $goal) {
-			$efforts[] = Effort::orderBy('created_at', 'DESC')
-				->where('goal_id', $goal->id)
-				->where('status', 0)
-				->where(function($query) use ($search) {
-									$query->orwhere('title', 'like', "%{$search}%")
-												->orwhere('content', 'like', "%{$search}%");
-					})->paginate(3);
-		}
-
-		return $efforts;
-	}
 	
 	/**
 		* 画像をリサイズして保存する

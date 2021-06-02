@@ -6,6 +6,9 @@ use App\Models\User;
 
 interface GoalRepositoryInterface
 {
+	// ユーザーの目標をすべて取得する。
+	public function getAllGoalsOfAUser($user);
+
 	// 未達成の目標を取得する。
 	public function getGoalsOnProgress($user);
 

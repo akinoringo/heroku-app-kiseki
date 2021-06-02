@@ -24,6 +24,21 @@ class GoalService{
 	}
 
 	/** 
+		* 自身の目標をすべて取得する
+		* @param Goal $goal
+		* @return  LengthAwarePaginator
+	*/
+	public function getAllGoalsOfAUser($user) {
+		// 未達成の目標を取得
+		$allGoalsOfAUser = $this->GoalRepository->getAllGoalsOfAUser($user)
+			->orderBy('created_at', 'DESC')
+			->paginate(5, ["*"], "goalspage");
+
+		return $allGoalsOfAUser;		
+	}	
+
+
+	/** 
 		* 自身の未達成の目標を取得する
 		* @param Goal $goal
 		* @return  Builder
