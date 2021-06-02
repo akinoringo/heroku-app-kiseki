@@ -11,6 +11,13 @@
       <div class="font-weight-bold"><a class="text-dark" href="{{route('mypage.show', ['id' => $effort->user->id ])}}">{{$effort->user->name}}</a></div>
       <div class="font-weight-lighter">{{ $effort->created_at->format('Y/m/d H:i') }}</div>
     </div>
+    @if ($effort->goal->continuation_days >= 3)
+    <img src="/images/logo-smile.png" class="rounded-circle ml-5" style="object-fit: cover; width: 50px; height: 50px;">
+    <div class="rounded ml-2 card-text text-center bg-success text-white pt-1 px-2">
+      <span style="font-size: 12px;">継続日数</span><br>
+      <h6 class="font-weight-bold">{{ $effort->goal->continuation_days }}日目だよ！</h6>
+    </div>    
+    @endif
 
   @if( Auth::id() === $effort->user_id && $effort->goal->status === 0)
     <!-- dropdown -->
