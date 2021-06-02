@@ -11,6 +11,25 @@
       <div class="font-weight-bold"><a class="text-dark" href="{{route('mypage.show', ['id' => $goal->user->id ])}}">{{$goal->user->name}}</a></div>
       <div class="font-weight-lighter">{{ $goal->created_at->format('Y/m/d H:i') }}</div>
     </div>
+    @if (\Carbon\Carbon::parse($goal->deadline)->lt('now') && $goal->status === 0 && \Carbon\Carbon::parse($goal->deadline)->diffInDays('now') < 7)
+    <img src="/images/logo-skull2.png" class="rounded-circle ml-5" style="object-fit: cover; width: 50px; height: 50px;">
+    <div class="rounded ml-2 card-text text-center bg-danger text-white pt-1 px-2">
+      <span style="font-size: 12px;">達成期限まであと、</span><br>
+      <h6 class="font-weight-bold">{{ \Carbon\Carbon::parse($goal->deadline)->diffInDays('now') }}日だ</h6>
+    </div>
+    @elseif (\Carbon\Carbon::parse($goal->deadline)->gte('now') && $goal->status === 0)
+    <img src="/images/logo-skull2.png" class="rounded-circle ml-5" style="object-fit: cover; width: 50px; height: 50px;">
+    <div class="rounded ml-2 card-text text-center bg-danger text-white pt-1 px-2">
+      <span style="font-size: 12px;">達成期限を</span><br>
+      <h6 class="font-weight-bold">過ぎているぞ</h6>
+    </div>
+    @elseif ($goal->status === 1)
+    <img src="/images/logo-smile.png" class="rounded-circle ml-5" style="object-fit: cover; width: 50px; height: 50px;">
+    <div class="rounded ml-2 card-text text-center bg-success text-white pt-1 px-2">
+      <span style="font-size: 12px;">目標達成</span><br>
+      <h6 class="font-weight-bold">おめでとう!!</h6>
+    </div>
+    @endif
 
   @if( Auth::id() === $goal->user_id && $goal->status === 0)
     <!-- dropdown -->
@@ -111,7 +130,7 @@
       </a>
       @if ($goal->status === 1)
       <i class="fas fa-check-square ml-2 text-success"></i>
-      <span class="text-success font-weight-bold">達成済み</p>
+      <span class="text-success">達成済み</p>
       @endif      
     </h3>
     <div class="card-text mb-3">
