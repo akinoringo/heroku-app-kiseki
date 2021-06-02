@@ -7,6 +7,7 @@ use App\Models\Goal;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProfileRequest;
+use App\Services\GoalService;
 use Illuminate\Http\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,15 @@ use Illuminate\Support\Facades\App;
 
 class ProfileController extends Controller
 {
+	protected $time_service;
+	protected $goal_repository;
+  
+	public function __construct(GoalService $goal_service)
+	{
+		// Serviceクラスからインスタンスを作成
+		$this->GoalService = $goal_service;
+	}	
+
 	/**
 		* マイページの表示
 		* プロフィール、目標および軌跡を表示
@@ -36,9 +46,7 @@ class ProfileController extends Controller
 		$goal_label = $request->label;		
 
 		// $userと$goal_labelに対応する目標を配列として取得
-		$goals = Goal::where('user_id', $user->id)
-			->orderBy('created_at', 'DESC')
-			->paginate(5, ["*"], "goalspage");
+		$goals = $this->GoalService->getAllGoalsOfAUser($user);
 
 		// $goalひとつひとつに紐づく$effortを配列として取得
 		$efforts = Effort::where('user_id', $user->id)

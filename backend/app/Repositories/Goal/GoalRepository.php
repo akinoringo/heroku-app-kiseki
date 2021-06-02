@@ -3,10 +3,24 @@
 namespace App\Repositories\Goal;
 
 use App\Models\Goal;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 class GoalRepository implements GoalRepositoryInterface
 {
+	/** 
+		* ユーザーの進行中の目標の取得
+		* @param User $user
+		* @param Goal $goal
+		* @return  Illuminate\Support\Builder
+	*/	
+	public function getAllGoalsOfAUser($user): Builder
+	{
+		$allGoalsOfAUser = Goal::where('user_id', $user->id);
+
+		return $allGoalsOfAUser;
+	}
+
 	/** 
 		* goal_idによる目標の取得
 		* @param Request $request
@@ -22,7 +36,7 @@ class GoalRepository implements GoalRepositoryInterface
 			})->get();
 
 		return $goalsOnProgress;
-	}
+	}	
 
 	/** 
 		* goal_idによる目標の取得
