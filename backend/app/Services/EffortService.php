@@ -69,6 +69,22 @@ class EffortService{
 		return $effortsOfGoal;
 	}
 
+  /** 
+    * ユーザーの未削除の軌跡を取得する
+    * @param Goal $goal
+    * @param Effort $effort
+    * @return  LengthAwarePaginator
+  */
+  public function getAllEffortsOfAUser($user){
+
+    // リポジトリ層で$goalに紐づく軌跡を取得
+    $allEffortsOfAUser = $this->EffortRepository->getAllEffortsOfAUser($user)
+      ->where('status', 0)
+      ->orderBy('created_at', 'DESC')
+      ->paginate(5, ["*"], "effortspage");
+
+    return $allEffortsOfAUser;
+  }  
 
 	/** 
 		* フォロー中の人の軌跡をすべて取得する

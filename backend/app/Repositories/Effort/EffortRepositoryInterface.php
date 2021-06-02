@@ -10,7 +10,9 @@ interface EffortRepositoryInterface
 
 	public function destroyEffort($effort);	
 
-	public function getAllEffortsExist();	
+	public function getAllEffortsExist();
+
+	public function getAllEffortsOfAUser($user);	
 
 	public function getEffortsOfGoal($goal);	
 
