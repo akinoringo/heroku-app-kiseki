@@ -86,7 +86,8 @@ class EffortRepository implements EffortRepositoryInterface
 	*/
 	public function getAllEffortsExist(): Builder
 	{
-		$allEffortsExist = Effort::where('status', 0);
+		$allEffortsExist = Effort::where('status', 0)
+			->orderBy('created_at', 'desc');
 
 		return $allEffortsExist;
 	}	
