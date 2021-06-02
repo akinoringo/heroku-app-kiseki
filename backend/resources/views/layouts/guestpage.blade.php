@@ -11,7 +11,7 @@
     <div class="jumbotron py-5">
       <h1 class="display-4">
         <span style="font-family: 'Pattaya', sans-serif; letter-spacing: 3px;">Kiseki</span>
-        <span>とは？</span>
+        <span style="font-size: 28px;">とは？</span>
       </h1>
       <p class="lead">
         目標達成のための日々の頑張り(軌跡)を記録するアプリです。
@@ -20,7 +20,7 @@
         <img src="images/stepup.svg" style=" width: 60%;">
       </div>
       <p>
-        まずはユーザー登録して目標を登録してみよう！
+        ユーザー登録して目標を登録してみよう！
       </p>
       <a class="btn btn-primary btn-lg" href="{{route('register')}}" role="button">ユーザー登録</a>
       <div class="my-0">
