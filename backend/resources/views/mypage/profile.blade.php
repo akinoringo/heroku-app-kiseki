@@ -48,15 +48,24 @@
         @endif        
         </div>
         <div class="mt-3">
-        @if ( $user->efforts_time_badge === 1)
-          <img src="/images/badge_perseverance.svg" class="rounded-circle" style="object-fit: cover; width: 80px; height: 80px;">
-        @endif
-        @if ( $user->stacking_days_badge === 1)
-         <img src="/images/badge_continuity.svg" class="rounded-circle" style="object-fit: cover; width: 80px; height: 80px;">
-        @endif
-        @if ( $user->goal_clear_badge === 1)
-         <img src="/images/badge_achieve.svg" class="rounded-circle" style="object-fit: cover; width: 80px; height: 80px;">   
-        @endif                               
+          @if ( $user->goal_clear_badge === 1)
+          <div class="d-inline-block text-center mb-0 mr-3">
+           <img src="/images/logoachieve3.png" class="rounded-circle" style="object-fit: cover; width: 75px; height: 75px;">  
+           <p class="mt-2 mb-0 font-weight-bold">達成力</p> 
+          </div>
+          @endif          
+          @if ( $user->stacking_days_badge === 1)
+          <div class="d-inline-block text-center mb-0 mr-3">
+           <img src="/images/logocontinuity.png" class="rounded-circle" style="object-fit: cover; width: 75px; height: 75px;">
+           <p class="mt-2 mb-0 font-weight-bold">継続力</p>
+          </div>
+          @endif  
+          @if ( $user->efforts_time_badge === 1)
+          <div class="d-inline-block text-center mb-0 mr-3">
+            <img src="/images/logoperseverance2.png" class="rounded-circle" style="object-fit: cover; width: 75px; height: 75px;">
+            <p class="mt-2 mb-0 font-weight-bold">忍耐力</p>
+          </div>
+          @endif                                       
         </div>         
 
       </div>     
