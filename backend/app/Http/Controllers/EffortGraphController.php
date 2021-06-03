@@ -65,7 +65,7 @@ class EffortGraphController extends Controller
     // 目標を進行中->達成済みの順に新しいものから3つ取得する。
     $goals = Goal::where('user_id', $user->id)
       ->orderBy('status', 'asc')
-      ->limit(3)
+      ->limit(5)
       ->orderBy('created_at', 'asc')
       ->get();
 
