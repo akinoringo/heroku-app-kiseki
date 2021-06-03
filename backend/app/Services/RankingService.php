@@ -21,6 +21,7 @@ class RankingService{
 				->where('created_at', '<=', Carbon::now()->endOfMonth());
 			}])
 			->orderBy('efforts_count', 'desc')
+			->limit(10)
 			->get();
 
 
@@ -48,7 +49,7 @@ class RankingService{
 					$plus =0;
 				}
 
-				if ($rank >= 10 ) {
+				if ($rank > 5 ) {
 					break;
 				}	
 				
