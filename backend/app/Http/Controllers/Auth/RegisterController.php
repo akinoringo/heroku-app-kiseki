@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -30,6 +31,17 @@ class RegisterController extends Controller
      * @var string
      */
     protected $redirectTo = '/';
+
+    protected function redirectTo() {
+        if (! Auth::user()) {
+            return redirect('/');
+        }
+
+        session()->flash('flash_message', '登録ありがとうございます。まずは目標を作成しましょう！');
+        session()->flash('color', 'success');        
+
+        return route('mypage.show', ['id'=> Auth::user()->id]);
+    }    
 
     /**
      * Create a new controller instance.
