@@ -47,7 +47,7 @@ http://app-kiseki.com
 - その他
 	- Sublime Text(エディタ)
 	- draw.io(画面設計)
-	- Photoshop(画像編集)
+	- Photoshop(ロゴ作成)
 	- Canva(ロゴ作成)
 
 ## 機能一覧
