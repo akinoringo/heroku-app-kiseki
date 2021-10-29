@@ -1,155 +1,78 @@
-# Kiseki
-日々の頑張り(軌跡)を記録して、目標達成をサポートするアプリです。<br>
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
-### こんな人におすすめ
-- 達成したい目標はあるけれど、なかなか継続して頑張れない
-- 目標達成に向けて日々頑張っているけれど、なかなか進歩が見られない
-- 達成したい目標がたくさんあり、一つに集中して継続できない
+<p align="center">
+<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
+</p>
 
-### Kisekiの特徴
-- 目標と目標達成期限を登録して、日々の積み上げを記録するだけだから簡単
-- ほかの人の目標や軌跡が確認できるからモチベーションが上がる
-- 一度に登録できる目標は３つまでだから、本当に達成したい目標に向けて頑張れる
+## About Laravel
 
-### 使い方
-1. 目標と目標達成期限を登録する
-2. 日々の軌跡(内容/反省点/取組時間)を記録する
-3. 日々の軌跡を積み上げて目標を達成しよう！
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-## URL
-http://app-kiseki.com
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-## 使用技術
-- フロントエンド
-	- Vue.js 2.6.12
-	- jQuery 3.4.1
-	- HTML/CSS/MDBootstrap
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-- バックエンド
-	- PHP 7.4.16
-	- Laravel 6.20.22
-	- PHPUnit 9.5.4
+## Learning Laravel
 
-- インフラ
-	- CircleCI
-	- Docker 20.10.5 / docker-compose 1.28.5
-	- Nginx 1.12
-	- MySQL 8.0.20
- 	- AWS
- 		- EC2
- 		- RDS
- 		- S3
- 		- CloudFormation
- 		- Route53
- 		- VPC
- 		- IAM
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-- その他
-	- Sublime Text(エディタ)
-	- draw.io(画面設計)
-	- Photoshop(ロゴ作成)
-	- Canva(ロゴ作成)
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## 機能一覧
-- ユーザー登録
-	- 新規登録、プロフィール編集機能
-	- プロフィール画像登録機能(AWS S3)
-	-	画像トリミング、保存機能(Intervention/Image)
-	- ゲストログイン機能
+## Laravel Sponsors
 
-- 目標投稿機能(CRUD)
-	- 目標の新規作成、詳細表示、削除機能
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-- 軌跡投稿機能(CRUD)
-	- 目標達成に向けての頑張り(軌跡)の新規作成、一覧表示、削除
+- **[Vehikl](https://vehikl.com/)**
+- **[Tighten Co.](https://tighten.co)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Cubet Techno Labs](https://cubettech.com)**
+- **[Cyber-Duck](https://cyber-duck.co.uk)**
+- **[British Software Development](https://www.britishsoftware.co)**
+- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
+- **[DevSquad](https://devsquad.com)**
+- [UserInsights](https://userinsights.com)
+- [Fragrantica](https://www.fragrantica.com)
+- [SOFTonSOFA](https://softonsofa.com/)
+- [User10](https://user10.com)
+- [Soumettre.fr](https://soumettre.fr/)
+- [CodeBrisk](https://codebrisk.com)
+- [1Forge](https://1forge.com)
+- [TECPRESSO](https://tecpresso.co.jp/)
+- [Runtime Converter](http://runtimeconverter.com/)
+- [WebL'Agence](https://weblagence.com/)
+- [Invoice Ninja](https://www.invoiceninja.com)
+- [iMi digital](https://www.imi-digital.de/)
+- [Earthlink](https://www.earthlink.ro/)
+- [Steadfast Collective](https://steadfastcollective.com/)
+- [We Are The Robots Inc.](https://watr.mx/)
+- [Understand.io](https://www.understand.io/)
+- [Abdel Elrafa](https://abdelelrafa.com)
+- [Hyper Host](https://hyper.host)
+- [Appoly](https://www.appoly.co.uk)
+- [OP.GG](https://op.gg)
 
-- コメント機能
+## Contributing
 
-- 積み上げ回数/時間の可視化(vue-chartjsによるグラフ機能)
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-- SNSシェア機能(vue-social-sharingによるSNSシェア機能)
+## Code of Conduct
 
-- タグ入力(vue-tag-input)/検索機能
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-- ページネーション機能
+## Security Vulnerabilities
 
-- 部分検索機能
-	- 軌跡のタイトルや内容による検索絞り込み
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-- フォロー機能(非同期通信)
-- いいね機能(非同期通信)
+## License
 
-- バッジの獲得機能
-	- 継続日数や時間に応じてバッジを獲得できる機能
-	
-- フラッシュメッセージ表示機能
-	- 目標や軌跡の新規作成、編集、削除、バッジの獲得時にフラッシュメッセージを表示		
-
-## アプリのクローン / アクセスの確認
-$: on terminal, [app]: on app container
-
-$ git clone https://github.com/akinoringo/app-kiseki.git
-
-- ディレクトリへの移動
-$ cd app-kiseki
-- 環境設定(docker-compose)ファイルのコピー
-$ cp .env-example .env
-
-- コンテナの立ち上げ
-$ docker-compose up -d
-
-- コンテナの中に入る
-$ docker-compose exec app bash
-
-- composer インストール
-[app] composer install
-
-- 環境設定(Laravel)ファイルのコピー
-[app] cp .env.example .env 
-
-- キーの設定
-[app] php artisan key:generate
-
-- マイグレーション
-[app]	php artisan migrate --seed
-
-- storageリンクの生成
-[app] php artisan storage:link
-
-- アクセスの確認
-http://localhost
-
-
-## アプリ使用画面
-
-### トップページ
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249623-f69edf80-bbd4-11eb-921a-4f402ebbc1d3.png">
-
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/117590745-c6365a80-b16b-11eb-97f2-c9ad731911ea.png">
-
-### SNSシェア/ランキング/みんなの投稿一覧
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249649-36fe5d80-bbd5-11eb-8a4d-a1f6a0c3345a.png">
-
-### タグ検索機能
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249801-95780b80-bbd6-11eb-8c8e-29cdfbe0e3cc.png">
-
-### コメント/いいね機能
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249827-d1ab6c00-bbd6-11eb-9e70-d4254f6256fd.png">
-
-### マイページ/フォロー/フォロワー
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249704-a411f300-bbd5-11eb-8561-2f2f19011b4e.png">
-
-### 獲得バッジの表示
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119312057-d17da000-bcac-11eb-943c-ba94eb5fb91a.png">
-
-### 積み上げのグラフ表示
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119334748-6e990280-bcc6-11eb-9523-daf7fb8c6417.png">
-
-### 目標入力画面/タグ追加機能
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249751-1551a600-bbd6-11eb-8f75-8bbc0da3ef9d.png">
-
-### 軌跡入力画面
-<img width="700" alt="Screen Shot of kiseki's view of mypage" src="https://user-images.githubusercontent.com/73481750/119249771-429e5400-bbd6-11eb-98cb-c391be3ed774.png">
-
-## インフラ構成図
-<img width="700" alt="Cloud Image" src="https://user-images.githubusercontent.com/73481750/117590129-ee708a00-b168-11eb-80be-ef54b3f64890.png">
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
