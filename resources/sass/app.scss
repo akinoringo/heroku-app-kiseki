@@ -6,3 +6,7 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+.common-wrapper {
+  min-height: calc(100vh - 32px);
+}
