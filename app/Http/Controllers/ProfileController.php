@@ -180,7 +180,7 @@ class ProfileController extends Controller
 
 		// if (App::environment('production')) {
 		$disk = Storage::disk('public');
-		$path = $disk->putFile('images', new File($tempPath)); //publicディレクトリの	imagesフォルダに保存。	
+		$path = $disk->put('images', new File($tempPath)); //publicディレクトリの	imagesフォルダに保存。	
 		$path = '/storage/'.$path; 	
 
 		return $path;	
