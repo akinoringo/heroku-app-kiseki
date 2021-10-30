@@ -178,7 +178,7 @@ class ProfileController extends Controller
 		$tempPath = $this->makeTempPath();
 		Image::make($file)->fit(200, 200)->save($tempPath);
 
-		if (App::environment('local')) {
+		if (App::environment('production')) {
 			$path = Storage::disk('public')
 				->putFile('images', new File($tempPath)); //publicディレクトリの	imagesフォルダに保存。	
 			$path = '/storage/'.$path; 	
@@ -186,11 +186,11 @@ class ProfileController extends Controller
 			return $path;	
 		}
 
-		if (App::environment('production')) {
-			$disk = Storage::disk('s3');
-			$filePath = $disk->putFile('images/profile', new File($tempPath), 'public'); //s3のimages/profileディレクトリの	imagesフォルダに保存。	
-			$path = $disk->url($filePath);		
-		}
+		// if (App::environment('production')) {
+		// 	$disk = Storage::disk('s3');
+		// 	$filePath = $disk->putFile('images/profile', new File($tempPath), 'public'); //s3のimages/profileディレクトリの	imagesフォルダに保存。	
+		// 	$path = $disk->url($filePath);		
+		// }
 
 		return $path;
 	}
