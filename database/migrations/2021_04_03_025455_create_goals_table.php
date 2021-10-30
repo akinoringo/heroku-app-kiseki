@@ -26,8 +26,7 @@ class CreateGoalsTable extends Migration
             $table->bigInteger('stacking_days')->unsigned()->default(0);
             $table->bigInteger('continuation_days')->unsigned()->default(0);
             $table->bigInteger('continuation_days_max')->unsigned()->default(0);
-            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamps();
         });
     }
 

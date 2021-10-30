@@ -24,8 +24,7 @@ class CreateEffortsTable extends Migration
             $table->string('image')->nullable();
             $table->bigInteger('effort_time')->unsigned();
             $table->tinyInteger('status')->default(0)->comment('0=アクティブ, 1=削除済み');
-            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));            
+            $table->timestamps();            
         });
     }
 
